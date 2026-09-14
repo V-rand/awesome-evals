@@ -11,7 +11,7 @@ Most "awesome" lists are link dumps. This one is **annotated and verified**: eve
 - **47 talks & podcasts transcribed and deep-noted** (verbatim + timestamps), and
 - **per-section gap audits** with adversarial verification.
 
-**443+ curated links · 143 deep reading notes** (see [`notes/`](notes/)). Markers: 🆕 = released/updated 2025–2026 · ⚠️ = caveat. Contributions welcome — see [CONTRIBUTING](CONTRIBUTING.md).
+**443+ curated links · 144 deep reading notes** (see [`notes/`](notes/)). Markers: 🆕 = released/updated 2025–2026 · ⚠️ = caveat. Contributions welcome — see [CONTRIBUTING](CONTRIBUTING.md).
 
 > 📘 **Playbook:** [**PATTERNS.md**](PATTERNS.md) — real, runnable code + worked examples for LLM-as-judge (aligned to humans), pass@k/pass^k, error analysis, trajectory & world-state grading, CI gating, verifiable rewards, and more.
 
@@ -571,7 +571,7 @@ Most "awesome" lists are link dumps. This one is **annotated and verified**: eve
 
 ## Deep notes
 
-This repo ships **143 deep reading notes** in [`notes/`](notes/) — structured summaries with key points, **verbatim quotes**, and themes, for the highest-signal sources:
+This repo ships **144 deep reading notes** in [`notes/`](notes/) — structured summaries with key points, **verbatim quotes**, and themes, for the highest-signal sources:
 
 - [`notes/articles/`](notes/articles/) — blog posts & practitioner essays
 - [`notes/talks/`](notes/talks/) — 47 transcribed talks, podcasts & lectures (with `[mm:ss]` timestamps)
