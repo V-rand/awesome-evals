@@ -1,94 +1,95 @@
-# Related-paper search — RewardBench 2 / reward model evaluation
+# Related-paper search — LLM evaluator self-preference
 
-Search date: 2026-09-23 (Asia/Shanghai)
+Search date: 2026-09-26 (Asia/Shanghai)
 
 Window: 2024–2026
 
-Queries: `reward model evaluation preference benchmark`; `LLM judge reward model robustness`; `verifier evaluation reasoning reward models`
+Queries: `LLM evaluator self preference bias`; `LLM judge own generations bias`; `evaluator generator identity bias`
 
 ## Search coverage and limitations
 
-The repository's installed `paper_search` CLI queried arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref. It returned 40 unique records after merging 8 cross-source duplicates (`open_alex=24`, `crossref=24`; `arxiv=0`, `dblp=0`, `openreview=0`, `semantic_scholar=0`). arXiv returned HTTP 406 for all three queries, DBLP returned non-JSON responses, Semantic Scholar returned HTTP 429 after bounded retries, and OpenAlex had a transient HTTP 504 before succeeding. Failed or rate-limited sources are not treated as evidence of absence.
+The repository's installed `paper_search` CLI queried arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref. It returned 46 unique records after merging 10 cross-source duplicates (`open_alex=24`, `semantic_scholar=8`, `crossref=24`; `arxiv=0`, `dblp=0`, `openreview=0`). arXiv returned HTTP 406 for all three queries, DBLP returned non-JSON responses, and Semantic Scholar returned HTTP 429 for part of the query set. Failed or rate-limited sources are not treated as evidence of absence.
 
-The installed CLI still lacks the skill-documented `--json` option, so it could not provide the complete abstract-bearing recovery file. Abstract-level relevance and dates for the retained set were verified on official arXiv, ICLR proceedings, GitHub or Hugging Face pages. The table retains 12 records directly relevant to general reward-model accuracy, downstream validity, robustness, inference-time scaling or agent/verifier extensions; unrelated medical, aviation, generic preference-learning and non-LLM reward papers were excluded. Citation counts are the incomplete API snapshot returned on 2026-09-23 and should not be interpreted as current totals.
+The installed CLI still lacks the skill-documented `--json` option, so it could not emit a complete abstract-bearing recovery file. Relevance, dates and claims for the retained set were checked against official arXiv, ACL Anthology or NeurIPS pages. Clearly unrelated generic evaluation and non-LLM bias records were excluded; uncertain search omissions remain possible. Citation counts are the incomplete API snapshot returned on 2026-09-26 and should not be interpreted as current totals.
 
 ## Relevant results
 
-| # | Paper | Date / venue | Citations in search snapshot | Relation to RewardBench 2 | Primary source |
+| # | Paper | Date / venue | Citations in search snapshot | Relation to target paper | Primary source |
 |---|---|---|---:|---|---|
-| 1 | RewardBench: Evaluating Reward Models for Language Modeling | 2024-03-20; NeurIPS 2024 D&B | 11 | Pairwise predecessor and shared benchmark/code base | https://arxiv.org/abs/2403.13787 |
-| 2 | RewardBench 2: Advancing Reward Model Evaluation | 2025-06-02; ICLR 2026 | 0 | Target paper; best-of-4, six-domain benchmark with BoN/PPO validation | https://arxiv.org/abs/2506.01937 |
-| 3 | How to Evaluate Reward Models for RLHF / Preference Proxy Evaluations | 2024-10-18; arXiv | not returned | Separates correctness and human-preference proxies and evaluates downstream relation | https://arxiv.org/abs/2410.14872 |
-| 4 | RM-Bench: Benchmarking Reward Models of Language Models with Subtlety and Style | 2024-10-21; arXiv | not returned | Pairwise benchmark emphasizing subtle content/style differences | https://arxiv.org/abs/2410.16184 |
-| 5 | Evaluating Robustness of Reward Models for Mathematical Reasoning | 2024-10-02; arXiv | not returned | Domain-specific RM robustness predecessor for mathematical reasoning | https://arxiv.org/abs/2410.01729 |
-| 6 | Inference-Time Scaling for Generalist Reward Modeling | 2025-04-03; arXiv | not returned | DeepSeek-GRM scales generative judging with principles, critiques and parallel sampling | https://arxiv.org/abs/2504.02495 |
-| 7 | Rethinking Reward Model Evaluation Through the Lens of Reward Overoptimization | 2025-05-19; arXiv | 0 | Tests benchmark design against policy overoptimization, not only static accuracy | https://arxiv.org/abs/2505.12763 |
-| 8 | VerifyBench: Benchmarking Reference-based Reward Systems for Large Language Models | 2025-05-21; arXiv | 0 | Extends meta-evaluation to reference-based reasoning verifiers | https://arxiv.org/abs/2505.15801 |
-| 9 | One Token to Fool LLM-as-a-Judge | 2025-07-11; arXiv | 1 | Adversarially tests false-positive rewards from superficial master-key tokens | https://arxiv.org/abs/2507.08794 |
-| 10 | Agent-RewardBench: Towards a Unified Benchmark for Reward Modeling across Perception, Planning, and Safety in Real-World Multimodal Agents | 2025-06-26; arXiv | not returned | Moves RM evaluation from single text answers to multimodal agent steps and trajectories | https://arxiv.org/abs/2506.21252 |
-| 11 | An Empirical Study of LLM-as-a-Judge for LLM Evaluation: Fine-tuned Judge Model is not a General Substitute for GPT-4 | ACL Findings 2025 | 34 | Cross-dataset generalization warning for specialized/fine-tuned judges | https://aclanthology.org/2025.findings-acl.306/ |
-| 12 | An Empirical Investigation of Practical LLM-as-a-Judge Improvement Techniques on RewardBench 2 | 2026-04-15; arXiv | 0 | Direct follow-up using RB2 to compare criteria injection and judge ensembling | https://arxiv.org/abs/2604.13717 |
+| 1 | LLM Evaluators Recognize and Favor Their Own Generations | 2024-04-15; NeurIPS 2024 | 807 | Target paper; intervenes on self-recognition and measures self-preference | https://arxiv.org/abs/2404.13076 |
+| 2 | Self-Preference Bias in LLM-as-a-Judge | 2024-10-29; arXiv | 5 | Tests familiarity/perplexity as a competing explanation | https://arxiv.org/abs/2410.21819 |
+| 3 | Replacing Judges with Juries: Evaluating LLM Generations with a Panel of Diverse Models | 2024-04-29; arXiv | 352 | Multi-model jury mitigation for single-judge family effects | https://arxiv.org/abs/2404.18796 |
+| 4 | Benchmarking Cognitive Biases in Large Language Models as Evaluators | ACL Findings 2024 | 43 | Places egocentric preference alongside broader evaluator biases | https://aclanthology.org/2024.findings-acl.29/ |
+| 5 | Humans or LLMs as the Judge? A Study on Judgement Bias | EMNLP 2024 | 64 | Compares human and LLM judgment biases | https://aclanthology.org/2024.emnlp-main.474/ |
+| 6 | Do LLM Evaluators Prefer Themselves for a Reason? | 2025-04-04; arXiv | 0 | Separates legitimate quality preference from harmful self-preference on verifiable tasks | https://arxiv.org/abs/2504.03846 |
+| 7 | Play Favorites: A Statistical Method to Measure Self-Bias in LLM-as-a-Judge | 2025-08-08; arXiv | 48 | Adjusts for underlying response quality with an independent evaluator | https://arxiv.org/abs/2508.06709 |
+| 8 | Beyond the Surface: Measuring Self-Preference in LLM Judgments | EMNLP 2025 | 3 | Uses gold judgments/DBG to reduce response-quality confounding | https://aclanthology.org/2025.emnlp-main.86/ |
+| 9 | Assistant-Guided Mitigation of Teacher Preference Bias in LLM-as-a-Judge | EMNLP Findings 2025 | 0 | Studies mitigation when a teacher judge favors aligned outputs | https://aclanthology.org/2025.findings-emnlp.510/ |
+| 10 | Are LLM Evaluators Really Narcissists? Sanity Checking Self-Preference Evaluations | 2026-01-30; arXiv | 0 | Shows shared errors can create false self-preference and proposes a quality baseline | https://arxiv.org/abs/2601.22548 |
+| 11 | Quantifying and Mitigating Self-Preference Bias of LLM Judges | 2026-04-24; arXiv | 0 | Automated equal-quality pairing across 20 models plus structured mitigation | https://arxiv.org/abs/2604.22891 |
+| 12 | Self- and Other-Labels Induce Bidirectional Bias in LLM Judges | 2026-06-06; arXiv | not returned | Separates source labels from generated-text style fingerprints | https://arxiv.org/abs/2608.18091 |
 
 ## Overview
 
-The retained corpus tracks a shift from pairwise static RM accuracy toward three additional validity questions: whether rankings survive best-of-N use, whether they predict policy optimization, and whether reward systems remain reliable under distribution shift or adversarial inputs. RewardBench 2 is the bridge: it improves static measurement and then demonstrates both a successful transfer case (BoN) and a boundary case (PPO).
+The literature moves from observing that an evaluator favors its own generations to identifying what the measurement actually contains. The target paper supplies an intervention on recognition ability; later work adds independent quality adjustment, verifiable correctness, gold judgments, shared-error controls and label-only manipulations. The central trend is methodological tightening: “picked its own output” is no longer accepted as sufficient evidence of identity-based favoritism.
 
 ## Trends
 
-- **2024 — benchmark formation:** RewardBench, RM-Bench, PPE and domain-specific math robustness work establish pairwise accuracy, preference agreement and proxy evaluation as competing RM metrics.
-- **Early 2025 — evaluation follows the optimization loop:** reward-overoptimization work asks whether benchmark design predicts what happens after the policy is optimized; DeepSeek-GRM asks how judge performance scales with inference compute.
-- **Mid-2025 — specialization and attacks:** VerifyBench isolates reference-based reasoning verification; One Token shows that high standard accuracy can coexist with exploitable false-positive reward channels; Agent-RewardBench moves toward trajectory-level multimodal feedback.
-- **2026 — RewardBench 2 becomes a development target:** criteria injection and ensembling are tuned directly against RB2, illustrating both practical usefulness and the eventual risk of benchmark overfitting.
+- **2024 — phenomenon and mechanism candidates:** the target paper links self-recognition to preference; contemporaneous work studies perplexity/familiarity, broader cognitive biases and multi-judge aggregation.
+- **Early 2025 — legitimate versus harmful preference:** verifiable math, factual and code tasks make it possible to ask whether the judge's own answer is actually better before labeling its vote biased.
+- **Late 2025 — explicit quality correction:** statistical and gold-judgment methods compare self/family effects conditional on independently estimated quality rather than raw win rate.
+- **2026 — sanity checks and interventions:** shared mistakes, evaluator quality, equal-quality pair construction and source-label experiments test whether earlier measurements isolate the intended construct; mitigation shifts toward decomposed rubrics and assistant/jury designs.
 
 ## Key themes
 
-1. **Harder static discrimination** — best-of-4, subtle negatives and domain-specific verifiers increase headroom beyond pairwise tests (#1, #2, #4, #5).
-2. **Downstream validity** — static scores must be checked separately for candidate selection and policy optimization (#2, #3, #7).
-3. **Reference-based verification** — reasoning correctness requires dedicated verifier benchmarks rather than broad preference proxies (#5, #8).
-4. **Generative judge scaling and robustness** — more inference compute can improve judges, but superficial triggers can still hack them (#6, #9, #12).
-5. **Distribution and modality expansion** — judge generalization across datasets, policy lineages and agent trajectories remains unresolved (#2, #10, #11).
+1. **Recognition versus familiarity** — an evaluator may identify a family style without representing literal authorship (#1, #2).
+2. **Quality confounding** — the model's output may genuinely be better, or judge and generator may share the same mistake (#6, #7, #8, #10).
+3. **Self-bias versus family-bias** — shared post-training and model-family signatures can matter even when checkpoints differ (#7, #12).
+4. **Protocol sensitivity** — order, labels, pairwise versus absolute grading and reference availability change measured bias (#1, #8, #12).
+5. **Mitigation by independence and decomposition** — diverse juries, assistant critiques and multidimensional rubrics reduce reliance on one model's latent preferences (#3, #9, #11).
 
 ## Keyword frequency in retained titles
 
 | Keyword | Count |
 |---|---:|
-| reward model / reward modeling | 8 |
-| evaluation / evaluating | 7 |
-| benchmark / benchmarking | 6 |
-| judge / judging | 3 |
-| robustness / overoptimization | 3 |
+| preference / prefer / favorites | 8 |
+| judge / evaluator | 8 |
+| bias | 7 |
+| self / own | 7 |
+| measure / quantify / benchmark | 4 |
 
 ## Most cited accepted papers in the retained set
 
 | Rank | Title | Year | Citations |
 |---:|---|---:|---:|
-| 1 | An Empirical Study of LLM-as-a-Judge for LLM Evaluation | 2025 | 34 |
-| 2 | RewardBench | 2024 | 11 |
-| 3 | One Token to Fool LLM-as-a-Judge | 2025 | 1 |
-| 4 | RewardBench 2 | 2026 | 0 in API snapshot |
+| 1 | LLM Evaluators Recognize and Favor Their Own Generations | 2024 | 807 |
+| 2 | Replacing Judges with Juries | 2024 | 352 |
+| 3 | Humans or LLMs as the Judge? | 2024 | 64 |
+| 4 | Play Favorites | 2025 | 48 |
+| 5 | Benchmarking Cognitive Biases in LLMs as Evaluators | 2024 | 43 |
 
-Only four retained records had both clearly verified acceptance/publication status and a citation value in the API snapshot. Missing or zero counts for recent papers are not evidence of low impact.
+Acceptance status was verified for the NeurIPS/ACL/EMNLP papers. Search-snapshot counts are uneven across providers and recent papers, so ranks are descriptive only.
 
 ## Most cited first authors in the retained set
 
 | Rank | Author | Papers in set | Total citations |
 |---:|---|---:|---:|
-| 1 | Hui Huang | 1 | 34 |
-| 2 | Nathan Lambert | 1 | 11 |
-| 3 | Yulai Zhao | 1 | 1 |
-| 4 | Saumya Malik | 1 | 0 |
-| 5 | Sunghwan Kim | 1 | 0 |
+| 1 | Arjun Panickssery | 1 | 807 |
+| 2 | Pat Verga | 1 | 352 |
+| 3 | Guiming Hardy Chen | 1 | 64 |
+| 4 | Evangelia Spiliopoulou | 1 | 48 |
+| 5 | Ryan Koo | 1 | 43 |
 
-The table uses only counts returned in the 2026-09-23 search snapshot; it does not infer citations for official-page-only records.
+The table uses only counts returned in the 2026-09-26 search snapshot and does not infer missing citations.
 
 ## Recommended reading path
 
-1. **RewardBench** (#1) — establish the original pairwise RM evaluation problem and open tooling.
-2. **RewardBench 2** (#2) — see how best-of-4, unseen prompts and downstream BoN/PPO validation change the benchmark's claims.
-3. **Rethinking Reward Model Evaluation Through the Lens of Reward Overoptimization** (#7) — move from static correctness to behavior after optimizing against the reward.
-4. **VerifyBench** (#8) — isolate reference-based reasoning verification as a separate construct.
-5. **One Token to Fool LLM-as-a-Judge** (#9) — finish with the adversarial robustness gap that ordinary accuracy leaves unmeasured.
+1. **LLM Evaluators Recognize and Favor Their Own Generations** (#1) — understand the original intervention and its evidence boundary.
+2. **Do LLM Evaluators Prefer Themselves for a Reason?** (#6) — introduce verifiable correctness and legitimate versus harmful preference.
+3. **Play Favorites** (#7) — see explicit statistical adjustment for candidate quality and family effects.
+4. **Beyond the Surface** (#8) — replace raw self-win rates with comparison to gold judgments.
+5. **Are LLM Evaluators Really Narcissists?** (#10) — finish with the strongest sanity check on shared-error confounding.
 
 ## Synthesis
 
-A useful RM evaluation must state which downstream operation it predicts. RewardBench 2 gives strong evidence for candidate ranking under one BoN setup and a useful floor for PPO, but it also shows that policy lineage and prompt distribution dominate fine-grained PPO ranking among competent RMs. The surrounding literature adds two missing axes: optimization-induced overfitting and adversarial reward hacking. The defensible interpretation is therefore not “RB2 score selects the best verifier,” but “RB2 is a broad static gate that must be followed by target-policy, target-distribution and attack-aware validation.”
+Self-preference is best treated as a measurement-identification problem, not a single bias score. Panickssery et al. show that recognition capability and preference co-move under interventions, which is stronger than a raw observational win rate. Yet later work demonstrates that familiarity, true quality, shared errors, family lineage and source labels can produce overlapping patterns. A defensible eval therefore needs blinded sources, order randomization, independent or verifiable quality controls, cross-family judges and stratified reporting. Without those controls, “the judge preferred itself” is an observation; it is not yet a causal explanation.
