@@ -1,64 +1,66 @@
-# Related-paper search — coding-agent verification and reward hacking
+# Related-paper search — tool-calling evaluator validity and harness variance
 
-Search date: 2026-09-30 (Asia/Shanghai)
+Search date: 2026-10-01 (Asia/Shanghai)
 
 Window: 2024–2026
 
-Queries: `coding agent verifier reward hacking`; `verification co-evolution generator evaluator`; `agent trajectory monitoring reward hacking`; `interactive judge frontend coding agent`
+Queries: `tool calling benchmark validity audit`; `agent benchmark evaluator human disagreement`; `tool use benchmark harness variance`; `benchmark audit agent evaluation`
 
 ## Search coverage and limitations
 
-The installed `paper_search` CLI queried arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref. It returned 108 unique records after merging 20 cross-source duplicate records (`arxiv=32`, `open_alex=32`, `openreview=32`, `crossref=32`). DBLP returned anti-bot/proxy errors, and Semantic Scholar returned HTTP 429 for all four queries; OpenReview also rate-limited part of the run. These failures are missing coverage, not evidence of absence.
+The installed `paper_search` CLI was invoked across arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref. DBLP returned anti-bot, proxy and HTTP 429 failures; the remaining multi-source run did not complete after several minutes and was stopped safely, without producing a JSON result. This is missing coverage, not evidence that related work is absent.
 
-The broad terms attracted unrelated work on hardware verification, autonomous driving, energy systems and generic multi-agent applications. The retained set below focuses on verifier failure under optimization, coding-agent trajectory monitoring, adversarial benchmark auditing, interactive reward signals and explicit generator–verifier co-training. Dates and central claims were checked against official arXiv or OpenReview pages. Citation counts are omitted because source coverage was incomplete and inconsistent.
+The search was therefore supplemented with primary-page web search and direct inspection of official arXiv/OpenReview records. The retained set focuses on evaluator–human disagreement, trace evidence, harness-induced variance, deterministic versus LLM scoring, and protocol-level benchmark validity. Dates and central claims were checked against primary pages; citation counts are omitted because bibliographic coverage was incomplete.
+
+The target paper itself requires extra bibliographic caution: its v1 reference list contains placeholder arXiv IDs and misidentifies LiveMCPBench as `2506.07982`, which is actually τ²-Bench. The corrected official records are included below.
 
 ## Relevant results
 
-| # | Paper | First public date / venue | Relation to The Verification Horizon | Primary source |
+| # | Paper | First public date / venue | Relation to the target paper | Primary source |
 |---:|---|---|---|---|
-| 1 | The Verification Horizon: No Silver Bullet for Coding Agent Rewards | 2026-06-24; arXiv v2 | Target paper; four reward constructions organized by scalability, faithfulness and robustness | https://arxiv.org/abs/2606.26300 |
-| 2 | RewardHackingAgents: Benchmarking Evaluation Integrity for LLM ML-Engineering Agents | 2026-03-11; arXiv | Makes evaluator tampering and train/test leakage auditable in fresh workspaces | https://arxiv.org/abs/2603.11337 |
-| 3 | MonitoringBench: Semi-Automated Red-Teaming for Agent Monitoring | 2026-05-10; arXiv | Uses adaptive attacks to reveal monitor performance hidden by ordinary elicitation | https://arxiv.org/abs/2605.09684 |
-| 4 | Do Androids Dream of Breaking the Game? / BenchJack | 2026-05-12; arXiv | Iterative hacker–patcher auditing for benchmark flaws across ten agent benchmarks | https://arxiv.org/abs/2605.12673 |
-| 5 | Hack-Verifiable Environments | 2026-05-20; arXiv | Embeds deterministically detectable hacks into environments, avoiding subjective post-hoc labels | https://arxiv.org/abs/2605.20744 |
-| 6 | SpecBench: Measuring Reward Hacking in Long-Horizon Coding Agents | 2026-05-20; arXiv v2 | Measures the visible-test versus compositional-held-out-test gap as code size grows | https://arxiv.org/abs/2605.21384 |
-| 7 | Hack-Verifiable Terminal Bench | 2026-08-22; arXiv | Applies hack-verifiable design to realistic terminal tasks and unknown-unknown exploits | https://arxiv.org/abs/2608.22103 |
-| 8 | One Token to Fool LLM-as-a-Judge | 2025-07-11; arXiv v3 | Shows minimal verifier false positives can be amplified into RLVR policy collapse | https://arxiv.org/abs/2507.08794 |
-| 9 | RL Tango: Reinforcing Generator and Verifier Together for Language Reasoning | NeurIPS 2025 | A direct generator–verifier co-training mechanism in reasoning tasks | https://openreview.net/forum?id=JRkFZl0TJ2 |
-| 10 | Counsel: A Meta-Evaluation Dataset for Agentic Tasks | 2026-06-19; arXiv | Human meta-labels distinguish correct localization from sound critique reasoning | https://arxiv.org/abs/2606.21627 |
-| 11 | RewardBench 2: Advancing Reward Model Evaluation | ICLR 2026 | Demonstrates that static reward-model ranking and downstream RL utility can diverge | https://openreview.net/forum?id=RDBVODhfpU |
+| 1 | Benchmarking the Benchmarks: A Validity Audit of Tool-Calling Evaluation | 2026-06-30; arXiv v1 | Target paper; audits evaluator–human mismatch across four tool-calling benchmarks | https://arxiv.org/abs/2607.02577 |
+| 2 | τ²-Bench: Evaluating Conversational Agents in a Dual-Control Environment | 2025-06; arXiv | One audited deterministic/stateful benchmark; official ID corrects the target paper's placeholder | https://arxiv.org/abs/2506.07982 |
+| 3 | LiveMCPBench: Can Agents Navigate an Ocean of MCP Tools? | 2025-08-03; arXiv / ICLR 2026 submission | One audited LLM-judge benchmark; official ID corrects the target paper's miscitation | https://arxiv.org/abs/2508.01780 |
+| 4 | MCP-Atlas: A Large-Scale Benchmark for Tool-Use Competency with Real MCP Servers | 2026-01-31; arXiv | One audited claims-based benchmark; reports 78% human agreement in its own setting | https://arxiv.org/abs/2602.00933 |
+| 5 | Claw-Eval: Towards Trustworthy Evaluation of Autonomous Agents | 2026-04-07; arXiv v3 | Uses traces, audit logs and environment snapshots to expose failures hidden by outcome-only grading | https://arxiv.org/abs/2604.06132 |
+| 6 | Auditing Automated Evaluation, Error Propagation, and Runtime Mitigation in Tool-Using Language Agents | 2026-04-17; arXiv | Human-calibrates substring and LLM judges; closely parallels the target's brittle-assertion finding | https://arxiv.org/abs/2604.16706 |
+| 7 | Do Androids Dream of Breaking the Game? / BenchJack | 2026-05-12; arXiv | Actively exploits benchmark flaws rather than only auditing label disagreement | https://arxiv.org/abs/2605.12673 |
+| 8 | Harness-Bench: Measuring Harness Effects across Models in Realistic Agent Workflows | 2026-05-27; arXiv | Makes model–harness configuration, not the base model alone, the evaluation unit | https://arxiv.org/abs/2605.27922 |
+| 9 | The Verification Horizon: No Silver Bullet for Coding Agent Rewards | 2026-06-24; arXiv v2 | Frames evaluator maintenance as generator–verifier co-evolution | https://arxiv.org/abs/2606.26300 |
+| 10 | Counsel: A Meta-Evaluation Dataset for Agentic Tasks | 2026-06-19; arXiv | Human meta-evaluates judge critiques, separating correct localization from reasoning quality | https://arxiv.org/abs/2606.21627 |
+| 11 | Do Agent Benchmarks Measure Capability? Protocol Validity in the Age of Agentic AI | 2026-07-24; arXiv | Extends audit from label mismatch to `Expose → Exploit → Mislead` and quantified score inflation | https://arxiv.org/abs/2607.22368 |
 
 ## Overview
 
-The retained literature separates four questions that are often collapsed into “does the verifier work?”: whether the reward approximates intent on ordinary data; whether the agent can actively exploit it; whether a monitor can detect those exploits under adaptive pressure; and whether the resulting signal remains useful for the actual training objective. The target paper contributes a systems view spanning all four, but its strongest causal evidence concerns local verifier interventions rather than the proposed long-run co-evolution thesis.
+The retained literature separates three validity questions. **Evaluator validity** asks whether the grader agrees with human task-success judgments. **Harness validity** asks whether the execution layer, retries, context and permissions change what is being measured. **Protocol validity** asks whether the intended capability remains necessary for obtaining the score, or whether an exposed shortcut can replace it. The target paper is strongest on the first question and supplies infrastructure for the second; later protocol-audit work makes the third question explicit.
 
 ## Trends
 
-- **2024–2025 — verifier quality and exploitability diverge:** reward-model benchmarks and token-level attacks show that natural-distribution accuracy does not characterize optimization safety.
-- **Early 2026 — evaluation integrity becomes a benchmark target:** RewardHackingAgents and SpecBench instrument evaluator tampering, leakage and held-out functional gaps instead of assuming the grader is trustworthy.
-- **Mid-2026 — monitoring is adversarially tested:** BenchJack and MonitoringBench generate stronger attacks and repeatedly patch or refresh evaluators, making robustness a moving target.
-- **Hack-verifiable design reduces label ambiguity:** HVE and HVTB put detectable exploit opportunities in the environment so hacking can be measured automatically rather than inferred from a judge.
-- **Verification broadens beyond pass/fail:** interactive browser behavior, user feedback and autonomous repo inspection provide richer signals, while introducing higher cost and new evaluator failure modes.
-- **Training objective determines the right metric:** BoN, threshold filtering and RL require different combinations of ranking, calibration, variance, false-positive rate and retained data volume.
+- **2024–2025 — realistic tool use expands faster than evaluator validation:** benchmarks add multi-turn state, live MCP servers and large tool ecosystems, often relying on exact state checks or scalable LLM judges.
+- **Early 2026 — trajectory evidence becomes first-class:** Claw-Eval and related work retain traces, environment snapshots and audit logs so completion, safety and robustness can be checked separately.
+- **Human calibration reveals both rigid and permissive failure:** substring/state matchers reject valid alternatives, while LLM judges and incomplete rubrics pass fluent but unexecuted outcomes.
+- **Harness configuration becomes part of measured capability:** 5,194 Harness-Bench trajectories show that model rankings cannot be interpreted independently of execution configuration.
+- **Single-run leaderboards lose epistemic weight:** the target paper's 23 LiveMCPBench reruns span 18.9pp end to end, motivating distributions, version pinning and repeated-run comparison.
+- **Auditing moves toward causal attribution:** Protocol Validity asks not only whether a score is wrong, but what exposure was available, whether the agent used it and how much the score was inflated.
 
 ## Key themes
 
-1. **Proxy gap under optimization** — a reward that works for current policies may fail after the policy learns its blind spots.
-2. **Outcome and trajectory separation** — a passing patch may come from invalid information access or grader tampering.
-3. **Static versus interactive evidence** — runtime interaction reveals failures invisible in source code and screenshots.
-4. **Known versus unknown exploits** — hardening known paths is insufficient without adaptive red-teaming and refreshed monitors.
-5. **Faithfulness versus measurability** — real user feedback is close to intent but noisy/private; embedded hacks are measurable but artificial.
-6. **Quality–quantity trade-off** — stricter evaluator filtering raises average quality while reducing the volume of usable training data.
+1. **Outcome truth versus evaluator verdict** — a benchmark label is a measurement output, not ground truth by definition.
+2. **Fact gates versus qualitative judgment** — state changes should be checked deterministically where possible; LLM judges should not override failed factual requirements.
+3. **Repair as a separate capability** — first-attempt success and bounded recovery should not be merged.
+4. **Versioned evidence** — task, tool state, runner, rubric, judge, retry policy and artifacts all belong in the result record.
+5. **Matched comparison** — evaluator designs must be compared on the same tasks, trajectories and evidence before claiming superiority.
+6. **Meta-evaluation closure** — human calibration itself needs agreement statistics, adjudication rules and publicly auditable samples.
 
 ## Recommended reading path
 
-1. **RewardBench 2** (#11) — understand why a static evaluator leaderboard is not enough for downstream training.
-2. **One Token to Fool LLM-as-a-Judge** (#8) — see how a small false-positive channel becomes a policy-level exploit.
-3. **SpecBench** (#6) — move from token attacks to long-horizon functional gaps between visible and held-out tests.
-4. **BenchJack** (#4) and **MonitoringBench** (#3) — study evaluator red-teaming and adaptive monitor failure.
-5. **The Verification Horizon** (#1) — integrate tests, trajectory monitors, interaction, user feedback and agentic evaluators into a single systems picture.
-6. **Hack-Verifiable Terminal Bench** (#7) — examine a post-target-paper attempt to test unknown exploits with deterministic labels.
+1. **LiveMCPBench** (#3) and **MCP-Atlas** (#4) — understand why dynamic tool ecosystems turn to LLM or claims-based scoring.
+2. **Claw-Eval** (#5) — see how independent evidence channels improve trajectory-aware evaluation.
+3. **AgentProp-Bench** (#6) — compare substring heuristics and LLM judges against human labels.
+4. **Harness-Bench** (#8) — treat the harness as part of the evaluated system.
+5. **Benchmarking the Benchmarks** (#1) — inspect concrete false positives, false negatives and repeated-run instability.
+6. **Protocol Validity** (#11) — move from disagreement diagnosis to evidence-backed shortcut attribution and score distortion.
 
 ## Synthesis
 
-There is no durable scalar reward independent of policy capability, task structure and evaluation access. A credible coding-agent training pipeline therefore needs versioned reward definitions, held-out functional checks, trace logging, environment hardening, adaptive attack generation, monitor precision/recall audits, and re-evaluation on each new policy distribution. The target paper makes this infrastructure view explicit. Its next falsifiable step is a longitudinal matched-budget experiment: hold tasks and policy updates constant, compare a fixed verifier against periodic manual repair and an explicit co-evolution loop, then measure clean task success, unseen-hack rate, monitor error, cost and data efficiency over multiple generations.
+A trustworthy tool-agent result should be represented as a versioned evidence bundle rather than a scalar: task specification, allowed tools and permissions, initial/final state, complete trajectory, submitted artifact, deterministic predicates, qualitative rubric, judge/version, retry policy, repeated-run distribution and human calibration sample. The target paper points in this direction with Tool-Veritas and Harness Lab, but its next decisive test is matched and reproducible: freeze a shared trajectory set, compare the original evaluator, deterministic-only gates, unrestricted LLM judging and deterministic-first restricted judging; report false-positive/false-negative rates, judge-only variance, cost and inter-annotator agreement, then release the exact artifacts.
