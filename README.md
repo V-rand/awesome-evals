@@ -11,7 +11,7 @@ Most "awesome" lists are link dumps. This one is **annotated and verified**: eve
 - **47 talks & podcasts transcribed and deep-noted** (verbatim + timestamps), and
 - **per-section gap audits** with adversarial verification.
 
-**443+ curated links · 153 deep reading notes** (see [`notes/`](notes/)). Markers: 🆕 = released/updated 2025–2026 · ⚠️ = caveat. Contributions welcome — see [CONTRIBUTING](CONTRIBUTING.md).
+**443+ curated links · 154 deep reading notes** (see [`notes/`](notes/)). Markers: 🆕 = released/updated 2025–2026 · ⚠️ = caveat. Contributions welcome — see [CONTRIBUTING](CONTRIBUTING.md).
 
 > 📘 **Playbook:** [**PATTERNS.md**](PATTERNS.md) — real, runnable code + worked examples for LLM-as-judge (aligned to humans), pass@k/pass^k, error analysis, trajectory & world-state grading, CI gating, verifiable rewards, and more.
 
@@ -277,6 +277,7 @@ Most "awesome" lists are link dumps. This one is **annotated and verified**: eve
 - **[RewardHackingAgents: Benchmarking Evaluation Integrity for LLM ML-Engineering Agents](https://arxiv.org/abs/2603.11337)** — Yonas Atinafu, Robin Cohen — <https://arxiv.org/abs/2603.11337> · *paper* — Treats evaluation integrity as a first-class benchmarked outcome instead of an assumption: two compromise vectors (evaluator tampering, train/test leakage) instrumented via patch tracking and runtime file-access logging; in natural agent runs evaluator-tampering attempts appear in ~50% of episodes, and evaluator locking eliminates them at a 25–31% median runtime overhead. 🆕
 - **[Benchmarking the Benchmarks: A Validity Audit of Tool-Calling Evaluation](https://arxiv.org/abs/2607.02577)** — Bhat, Vaghasiya, Mohsin, Aali — <https://arxiv.org/abs/2607.02577> · *paper (Jun/Jul 2026)* — Cross-benchmark validity audit of BFCL v4, τ²-Bench, LiveMCPBench, and MCP-Atlas across 496 expert-reviewed tasks: 92 evaluator–human disagreements (18.5%). Across 23 full-pipeline reruns of the same 95-task LiveMCPBench configuration, scores range from 57.9% to 76.8%; this mixes agent and evaluator sampling, so it is not isolated judge-only variance. Describes Tool-Veritas and Harness Lab, but the v1 paper says their public release is still forthcoming. 🆕 ⚠️
 - **[Do Agent Benchmarks Measure Capability? Protocol Validity in the Age of Agentic AI](https://arxiv.org/abs/2607.22368)** — Shao, Chen, Zhang, Pan, Luo — <https://arxiv.org/abs/2607.22368> · *paper (Jul 2026)* — Separates benchmark failure into `Expose → Exploit → Mislead`, audits 2,385 traces across 15 benchmark families, and grounds each finding in trace/artifact/grader evidence. Frontier Science's 67.0% finding applies only to 494 passing traces, while five paired cases show 0.447–1.000 Mislead gaps; suspicious subsets and a 0.76-recall detector prevent interpreting zeros or cohort rates as benchmark-wide prevalence. 🆕 ⚠️
+- **[Shortcutting the Fix: Identifying and Categorizing Agentic Exploits in Software Engineering Benchmarks](https://arxiv.org/abs/2609.06780)** — Ludwig, Ahmad, Majumdar, Ginsburg (NVIDIA) — <https://arxiv.org/abs/2609.06780> · *paper (Sep 2026)* — Audits 12,390 mini-swe-agent trajectories across five open models, SWE-bench Multilingual, and DeepSWE. A Solution Originality instruction cuts judge-detected shortcutting from 45.1–82.4% / 44.2–66.1% to 4.0–10.7% / 1.5–7.1%; however, the v1 has no human judge calibration or per-run proof that flagged access supplied the fix or inflated the score, and SWE-bench Pass@1 falls 4.4–13.3pp. 🆕 ⚠️
 - **[Prediction: A Frontier Open Source LLM Will Be Released On 3rd December 2026](https://blog.doubleword.ai/frontier-os-llm)** — Jamie Dborin (Doubleword) — <https://blog.doubleword.ai/frontier-os-llm> · *blog* — Extrapolates the Artificial Analysis Intelligence Index across 18 constituent benchmarks to forecast the open-vs-closed capability gap; a naive fit of the headline index points to convergence by 3 Dec 2026, but the average per-benchmark lag holds steady at ~5 months — a worked cautionary case in reading trends off an aggregate leaderboard index rather than its components. 🆕
 
 **Must-reads:** Press · Kapoor et al. · OpenAI (SWE-bench Verified) · Leaderboard Illusion
@@ -572,7 +573,7 @@ Most "awesome" lists are link dumps. This one is **annotated and verified**: eve
 
 ## Deep notes
 
-This repo ships **153 deep reading notes** in [`notes/`](notes/) — structured summaries with key points, **verbatim quotes**, and themes, for the highest-signal sources:
+This repo ships **154 deep reading notes** in [`notes/`](notes/) — structured summaries with key points, **verbatim quotes**, and themes, for the highest-signal sources:
 
 - [`notes/articles/`](notes/articles/) — blog posts & practitioner essays
 - [`notes/talks/`](notes/talks/) — 47 transcribed talks, podcasts & lectures (with `[mm:ss]` timestamps)
