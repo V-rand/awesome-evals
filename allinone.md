@@ -1,103 +1,79 @@
-# Related-paper search — security mechanisms in coding-agent harnesses
+# Related-paper search — lifecycle safety of agent harnesses
 
-Search date: 2026-10-12 (Asia/Shanghai)
+Search date: 2026-10-14 (Asia/Shanghai)
 
-Window: 2026, prioritizing primary papers and official project pages
+Window: 2025–2026, prioritizing original papers, official project pages and public artifacts
 
-Queries: `coding agent harness security benchmark`; `agent harness permission security utility`; `coding agent sandbox allowlist denylist`; `AI agent harness attack surface`
+Queries: `agent harness lifecycle safety benchmark`; `coding agent persistence detection security`; `agent harness configuration attack benchmark`; `AI agent incident recovery security`
 
 ## Search coverage and limitations
 
-The installed six-source `paper_search` workflow returned 142 unique records after merging 40 cross-source duplicates: arXiv 48, OpenAlex 48, OpenReview 38 and Crossref 48. DBLP was blocked by anti-bot handling and Semantic Scholar returned HTTP 429. Those failures are missing coverage, not evidence that adjacent work does not exist.
+The installed six-source search workflow returned 237 unique records after merging 61 cross-source duplicate records: arXiv 60, OpenAlex 60, OpenReview 58, Semantic Scholar 60 and Crossref 60. DBLP failed behind anti-bot/TLS handling; OpenReview and Semantic Scholar also required HTTP-429 retries. These failures are coverage gaps, not negative evidence.
 
-The target paper was read in full, all 23 PDF pages were rendered, and its mechanism definitions, 400-cell rating protocol, task table, metric definition, result tables, cases and limitations were inspected. Dates and headline claims for the closest papers were separately checked against arXiv or official project pages. The official HSB page says tasks and utility checks are public; the full harness dataset, rating records, trial artifacts and analysis scripts are still being prepared.
+HarnessRisk was read in full and all 20 PDF pages were rendered. Its definitions, 128 cases, three-turn protocol, metric validation, tables, figures, appendix prompts and public artifacts were inspected. Dates and headline claims below were checked against arXiv or an official project page. The public GitHub repository and Hugging Face dataset expose the harness adapters, evaluators and 128 case specifications, but—at the inspected 2026-08-19 repository commit—do not expose raw trajectories, the validity ledger or table-generation outputs needed to reconstruct every reported aggregate.
 
 ## Relevant results
 
-| # | Paper | First public date | What it contributes | Primary source |
+| # | Paper | First public date | Relation to HarnessRisk | Primary source |
 |---:|---|---|---|---|
-| 1 | SkillGuard | 2026-06-02 | Permission-bearing skills governed across context influence and action side effects | https://arxiv.org/abs/2606.03024 |
-| 2 | One Goal, Many Commands | 2026-06-14 | Systematic command-denylist bypass search across 1,709 real-world denylists | https://arxiv.org/abs/2606.15549 |
-| 3 | Local LLM Agents as Vulnerable Runtimes | 2026-06-19 | Static audit of agent runtime components and implementation-level weaknesses | https://arxiv.org/abs/2606.21071 |
-| 4 | Harness Engineering | 2026-07-15 | Source-code anatomy of eleven coding-agent harnesses and their safety controls | https://arxiv.org/abs/2609.00006 |
-| 5 | HarnessRisk | 2026-08-18 | Lifecycle benchmark for utility, attack success, persistence and detection | https://arxiv.org/abs/2608.17597 |
-| 6 | When Context Gets Root | 2026-08-27 | Instruction privilege escalation caused by harness context assembly | https://arxiv.org/abs/2608.27299 |
-| 7 | What’s in Your Agent’s Context? | 2026-09-01 | MessageRole and Cross-Scope context privilege escalation in 12 harnesses | https://arxiv.org/abs/2609.01222 |
-| 8 | Reward Hacking Challenges Oversight of Autonomous Research Agents | 2026-09-23 | Static and adaptive oversight failures when agents control evaluation evidence | https://arxiv.org/abs/2609.28614 |
-| 9 | CheatBench | 2026-09-28 | Cross-domain behavior under implicit honest-work norms and actionable shortcuts | https://arxiv.org/abs/2609.36308 |
-| 10 | SideKernel | 2026-10-01 | Usable microVM sandbox for local macOS coding agents | https://arxiv.org/abs/2610.02456 |
-| 11 | HarnessSecurity-Bench | 2026-10-06 | Target paper; native mechanism taxonomy, evidence matrix and ON/OFF runtime evaluation | https://arxiv.org/abs/2610.07639 |
+| 1 | ClawSafety | 2026-04-01 | Broad safety benchmark for autonomous desktop agents; motivates system-level rather than answer-only evaluation | https://arxiv.org/abs/2604.01438 |
+| 2 | Your Agent, Their Asset | 2026-04-06 | Studies the security externalities created when agents can access user assets | https://arxiv.org/abs/2604.04759 |
+| 3 | SafeHarness | 2026-04-15 | Treats harness design as a safety intervention and measures the resulting behavior | https://arxiv.org/abs/2604.13630 |
+| 4 | Auditing Agent Harness Safety | 2026-05-14 | Audits safety properties at the harness layer instead of assigning all failures to the base model | https://arxiv.org/abs/2605.14271 |
+| 5 | AgentS4D | 2026-07-29 | Evaluates security across agent deployment surfaces and complements lifecycle-phase coverage | https://arxiv.org/abs/2607.27294 |
+| 6 | MemSecBench | 2026-07-29 | Isolates long-term-memory poisoning and persistence, one of HarnessRisk’s six phases | https://arxiv.org/abs/2607.27080 |
+| 7 | HarnessSafe | 2026-08-07 | Evaluates safety of harness-mediated operation and provides a nearby system-level framing | https://arxiv.org/abs/2608.06984 |
+| 8 | HarnessRisk | 2026-08-18 | Target paper; 128 cases over six lifecycle phases and four trajectory-level outcomes | https://arxiv.org/abs/2608.17597 |
+| 9 | HarnessSecurity-Bench | 2026-10-06 | Tests native security mechanisms with deterministic task and attack-effect checks | https://arxiv.org/abs/2610.07639 |
+| 10 | EvoRiskBench | 2026-10-02 | Adds evolving and adaptive risks that a fixed lifecycle suite may not retain over time | https://arxiv.org/abs/2610.03153 |
 
-## Overview
+## What HarnessRisk changes
 
-HarnessSecurity-Bench separates three questions that are often collapsed. RQ1 derives ten mechanism categories from source and official materials. RQ2 assigns evidence-backed `D/C/O/A/U` ratings to 400 harness–mechanism cells. RQ3 runs nine mechanisms across 23 adversarially augmented tasks, six harnesses and 2,500 trials, with deterministic utility and attack-effect oracles outside the workspace.
+HarnessRisk changes the evaluation unit from a single prompt or tool call to the **model–harness configuration over a lifecycle trajectory**. Its 128 cases cover six phases: Harness Configuration and Capability Extension (22 cases each), then Runtime Operation, State Persistence, Action Control and Incident Recovery (21 each). Every case has three owner turns, and an untrusted artifact can influence configuration, become a skill, enter memory, redirect a high-impact action or survive attempted recovery.
 
-The central result is not “sandboxing works.” Different controls fail in different ways. Network isolation and read-only mode greatly reduce attack effects but also remove capabilities legitimate tasks need. Command allow/deny lists, path restrictions and MCP permissions preserve more utility, yet alternative interpreters or retained tools can still reach the protected operation. Project trust looks costly only when a startup refusal is pooled with four harnesses that retain full utility.
+The benchmark evaluates 14 configurations across OpenClaw, Nanobot and Hermes. Four models run on all three harnesses; GPT-5.5 and Claude Opus 4.7 run only on OpenClaw. A GPT-5.4 judge assigns four binary trajectory metrics: Utility, Attack Success Rate, Persistence and Detection. On sampled calibration sets, judge agreement ranges from 84.3% to 92.5%, with Cohen’s κ from 0.65 to 0.83.
 
-The metric boundary is important: Utility and ASR are proportions of oracle checks, not binary per-trial success rates. Different mechanisms have different tasks, attack goals, denominators and paired harnesses. Their overall deltas describe their own benchmark slices, not a comparable product leaderboard.
+Reported ASR spans 12.6%–80.9% while Utility spans 75.0%–97.6%. This is the paper’s most useful result: successful completion does not imply safe completion. For GLM-5.2, ASR is 54.7% on OpenClaw, 12.6% on Nanobot and 23.8% on Hermes. That 4.3× range establishes configuration sensitivity, but not a harness-only causal effect: the systems differ jointly in prompts, tools, state, authorization and adapters.
 
-## Trends
+Detection also is not equivalent to prevention. Across the 12 configurations used for the correlation analysis, Detection and ASR have an unadjusted Pearson correlation of −0.708 (p=.010) and Spearman correlation of −0.769 (p=.003); after adding model and harness indicators, the reported significance weakens to p=.101. MiniMax M3 on OpenClaw detects 97.9% yet still has 31.2% ASR; GLM-5.2 detects 92.2% yet has 54.7% ASR.
 
-- **From model-only safety to model–harness systems:** the same model can face different tools, permissions, context and execution boundaries.
-- **From mechanism presence to behavioral effect:** documentation-backed implementation does not establish runtime protection.
-- **From content filtering to operation mediation:** prompt-injection screening leaves attacks framed as ordinary workflow prerequisites; the protected action still needs an independent gate.
-- **From command names to reachability:** a denied executable can be reached through an allowed Python interpreter, wrapper or child process.
-- **From ASR alone to paired utility:** blocking every action is secure only in the trivial sense; legitimate completion must remain measurable.
-- **From one aggregate to a mechanism matrix:** task requirements, baseline ASR and product semantics determine whether the same control helps.
-- **From hidden defaults to verifiable policy:** closed-source unknowns are evidence gaps; providers should expose versioned effective settings and coverage.
-- **From isolated controls to defense composition:** real deployments combine project trust, approval, path, network and tool policies, an interaction HSB does not yet test.
+## Key distinctions and audit points
 
-## Key distinctions
+1. **Lifecycle coverage versus causal phase effects.** The six phases organize cases; they are not homogeneous interventions that identify a phase’s causal contribution.
+2. **Configuration comparison versus harness comparison.** Cross-harness results compare complete deployments, not a single isolated harness variable.
+3. **Detection versus containment.** Recognizing suspicious content does not prove that the agent revoked credentials, removed extensions, repaired memory or prevented side effects.
+4. **Persistence versus observable persistence.** The evaluator can score only state exported by a harness adapter; hidden state can be missed.
+5. **Owner authority versus provenance laundering.** Later owner turns sometimes explicitly approve or restate suspicious material. Some measured failures therefore combine indirect attack susceptibility with a trusted-input intervention that launders provenance.
+6. **Process isolation versus a security boundary.** The repository’s sandbox creates per-run process state; it is not a kernel namespace, chroot or firewall. An agent with arbitrary command execution may still reach host or network resources.
+7. **Judge estimate versus deterministic fact.** All four main metrics come from GPT-5.4. Deterministic rules and human labels calibrate samples but do not generate the full headline tables.
+8. **Valid-run estimate versus deployment rate.** Provider errors, empty or abnormal responses and judge parse failures are excluded without a per-configuration ledger, so rates are conditional on retained runs.
+9. **Low ASR versus safe competence.** Refusal, tool failure and incomplete task execution can all suppress ASR; Utility must be read beside it.
+10. **Three-seed variation versus inferential uncertainty.** The reported standard deviation over three seeds is not a standard error and does not absorb provider drift.
 
-1. **Implementation evidence versus protection** — RQ2 ratings concern source/docs/CLI evidence; RQ3 concerns execution outcomes.
-2. **Unknown versus absent** — `U` means insufficient/conflicting evidence, not non-implementation.
-3. **Default-on versus effective** — `D/C` says a mechanism is active by default, not that its mediation is complete.
-4. **Risk capability versus defense** — auto-approve removes confirmation barriers and is intentionally included as a contrast.
-5. **Oracle pass versus trial success** — one trial may satisfy all utility checks and all attack checks simultaneously.
-6. **Aggregate utility gain versus capability gain** — blocking an attack can prevent it from corrupting a legitimate deliverable.
-7. **Restriction versus refusal** — Gemini PT’s 0% utility/ASR comes from not starting, not selective safe execution.
-8. **Single-setting observation versus causal effect** — `D/A/U` cells lack an ON/OFF counterfactual.
-9. **Attack stress test versus prevalence** — malicious resources are deliberately planted; ASR is not a deployment base rate.
-10. **One path blocked versus complete mediation** — protection requires gating all paths to the operation, not one command syntax.
+## Relation to adjacent evaluation lines
 
-## Numerical audit
-
-- 400 cells = 40 harnesses × 10 mechanisms; 205 implemented, 83 absent, 112 unknown.
-- Implemented cells split into 109 opt-in and 96 active by default (64 configurable-off, 32 default-enforced).
-- Closed-source unknowns are 69/130 (53.1%); open-source unknowns are 43/270 (15.9%).
-- RQ3 covers 23 tasks, nine mechanisms, six harnesses and 2,500 trials; AL is excluded because it records rather than directly changes execution.
-- AA changes Utility 77.1%→95.4% and ASR 29.2%→95.6% under the specified approval reviewer.
-- NI changes Utility 90.9%→66.4% and ASR 57.1%→0.8%; 161/162 lost utility passes are required network interactions.
-- RO changes Utility 69.8%→35.8% and ASR 8.3%→0.8%; the baseline attack rate is already low.
-- CAL/CDL/PR/MCP change ASR by −48.1/−40.4/−48.1/−28.1pp with −1.5/+5.2/+0.3/+0.5pp Utility changes.
-- PT’s aggregate −20pp Utility comes entirely from Gemini CLI refusing all 40 untrusted-workspace trials.
-- Only gptme has a paired PIF comparison: ASR −3.3pp and Utility −1.9pp; other PIF cells cannot estimate an ON/OFF effect.
-- Token totals omit unavailable conditions; the project page’s 2,218.20M is a recorded-total figure, not guaranteed full cost.
+- **HarnessSecurity-Bench** isolates native mechanism toggles and uses deterministic outside-workspace oracles; HarnessRisk broadens the story to the whole lifecycle but relies more heavily on an LLM judge. They answer different questions and should be combined rather than ranked.
+- **MemSecBench** gives deeper resolution on memory poisoning; HarnessRisk shows how memory failure connects to configuration, action and recovery. A useful follow-up should preserve that cross-phase causal chain.
+- **SafeHarness, HarnessSafe and Auditing Agent Harness Safety** share the system-level unit of analysis. HarnessRisk’s distinctive contribution is the six-phase responsibility map and the joint Utility/ASR/Persistence/Detection view.
+- **EvoRiskBench** highlights temporal adaptation. HarnessRisk’s public static cases can establish a reproducible baseline, but not whether a defense remains effective after attackers learn its evaluator or policy.
 
 ## Recommended reading path
 
-1. **HarnessSecurity-Bench** (#11) — learn the mechanism taxonomy, rating/effect split and paired outcome design.
-2. **Harness Engineering / Local LLM Agents** (#4/#3) — understand the implementation layer being classified and audited.
-3. **One Goal, Many Commands** (#2) — see why command-string policy is structurally fragile.
-4. **Context Gets Root / What’s in Your Context** (#6/#7) — connect context assembly to privilege escalation before tool execution.
-5. **SkillGuard** (#1) — examine a principal/permission model that links context-bearing artifacts to action rights.
-6. **HarnessRisk** (#5) — compare mechanism-centric evaluation with lifecycle-centric persistence/detection coverage.
-7. **SideKernel** (#10) — add deployment usability and sandbox adoption to efficacy/utility.
-8. **Reward Hacking Oversight / CheatBench** (#8/#9) — connect enforceable boundaries to behavior and reviewer limitations.
+1. **HarnessRisk** — understand the lifecycle taxonomy, three-turn case protocol and four outcomes.
+2. **HarnessSecurity-Bench** — inspect mechanism-level counterfactuals and deterministic attack-effect checks.
+3. **MemSecBench** — deepen the State Persistence phase and distinguish memory write, later retrieval and action-time use.
+4. **SafeHarness / HarnessSafe / Auditing Agent Harness Safety** — compare harness-level interventions and audit assumptions.
+5. **EvoRiskBench** — test whether fixed-case conclusions survive adaptive pressure and system updates.
+
+## Falsifiable follow-up
+
+A narrow extension is a **provenance-carrying recovery benchmark**. Hold the task, artifact and model fixed; vary only whether provenance and revocation dependencies survive the transition from ingestion to memory to recovery. Measure attack side effect, malicious-state persistence, evidence preservation and verified rollback.
+
+- **Competing explanation:** the apparent gain comes from adding another warning string, not from carrying provenance or dependency state.
+- **Discriminating intervention:** keep warning text identical while ablating provenance labels, dependency links and recovery actions separately.
+- **Falsifier:** if provenance/dependency ablation does not change side-effect or rollback rates beyond a prespecified interval, the mechanism claim fails.
+- **Stop rule:** do not scale to more models until at least one matched configuration shows a reproducible separation between “detected” and “fully remediated.”
 
 ## Synthesis
 
-The reusable evaluation object is an operation-reachability ledger:
-
-```text
-untrusted resource enters context
-  → agent proposes an action
-  → native policy allows, asks, or denies one route
-  → alternative commands/tools/interpreters are enumerated
-  → external oracle records the protected operation and its consequence
-  → legitimate completion is evaluated in the same trial
-```
-
-A decisive follow-up should create semantically equivalent shell, Python, Node, symlink, child-process and MCP paths to the same protected object, then compare native single controls, recommended multi-control configuration and an operation-level reference monitor. Report per-trial “any path reached the operation” together with complete legitimate success, approvals, latency and token cost.
-
-If the reference monitor does not outperform native composition on path coverage, stop claiming a new authorization layer is needed. If it only lowers attack success by destroying legitimate completion, call it capability removal. If bypasses occur only through one interpreter, narrow the claim to that enforcement gap rather than generalizing to all harness security.
+HarnessRisk’s strongest contribution is not a new safety score. It makes the lifecycle responsibility chain measurable and shows why Utility, Detection and safety cannot substitute for one another. Its main empirical limitation is equally important: the public evidence currently supports a benchmark design and reported aggregates, but not a fully reconstructable run ledger, and its cross-harness numbers should be read as configuration-level observations rather than causal rankings.
