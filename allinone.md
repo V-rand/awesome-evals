@@ -1,79 +1,75 @@
-# Related-paper search — lifecycle safety of agent harnesses
+# Related-paper search — memory poisoning, consequence, and selective repair
 
-Search date: 2026-10-14 (Asia/Shanghai)
+Search date: 2026-10-15 (Asia/Shanghai)
 
-Window: 2025–2026, prioritizing original papers, official project pages and public artifacts
+Window: 2025–2026, with original papers and official arXiv records preferred
 
-Queries: `agent harness lifecycle safety benchmark`; `coding agent persistence detection security`; `agent harness configuration attack benchmark`; `AI agent incident recovery security`
+Queries: `agent memory poisoning selective repair`; `agent memory security benchmark Write Execute Forget`; `persistent agent memory attack evaluation`; `memory poisoning recovery agent benchmark`
 
 ## Search coverage and limitations
 
-The installed six-source search workflow returned 237 unique records after merging 61 cross-source duplicate records: arXiv 60, OpenAlex 60, OpenReview 58, Semantic Scholar 60 and Crossref 60. DBLP failed behind anti-bot/TLS handling; OpenReview and Semantic Scholar also required HTTP-429 retries. These failures are coverage gaps, not negative evidence.
+The installed six-source paper search returned 144 unique records after merging 68 cross-source duplicates: arXiv 48, OpenAlex 48, OpenReview 44, Semantic Scholar 24, Crossref 48, and DBLP 0. DBLP returned anti-bot/HTTP-429 errors, and some Semantic Scholar queries also returned HTTP 429. These are gaps in search coverage. Paper identity, first public date and abstract-level claims in the selection below were checked against official arXiv records.
 
-HarnessRisk was read in full and all 20 PDF pages were rendered. Its definitions, 128 cases, three-turn protocol, metric validation, tables, figures, appendix prompts and public artifacts were inspected. Dates and headline claims below were checked against arXiv or an official project page. The public GitHub repository and Hugging Face dataset expose the harness adapters, evaluators and 128 case specifications, but—at the inspected 2026-08-19 repository commit—do not expose raw trajectories, the validity ledger or table-generation outputs needed to reconstruct every reported aggregate.
+The target paper was read in full: 28 PDF pages were extracted and rendered, with the setup, seven checkpoint criteria, main table, figures, worked cases, backend details, runtime controls and judge protocol inspected. Adjacent papers below were checked at their primary pages; they were not all read in full. The target arXiv record does not provide a direct official code/data/replay repository link, so the reported aggregates are not independently reconstructed here.
 
-## Relevant results
+## Closest primary papers
 
-| # | Paper | First public date | Relation to HarnessRisk | Primary source |
-|---:|---|---|---|---|
-| 1 | ClawSafety | 2026-04-01 | Broad safety benchmark for autonomous desktop agents; motivates system-level rather than answer-only evaluation | https://arxiv.org/abs/2604.01438 |
-| 2 | Your Agent, Their Asset | 2026-04-06 | Studies the security externalities created when agents can access user assets | https://arxiv.org/abs/2604.04759 |
-| 3 | SafeHarness | 2026-04-15 | Treats harness design as a safety intervention and measures the resulting behavior | https://arxiv.org/abs/2604.13630 |
-| 4 | Auditing Agent Harness Safety | 2026-05-14 | Audits safety properties at the harness layer instead of assigning all failures to the base model | https://arxiv.org/abs/2605.14271 |
-| 5 | AgentS4D | 2026-07-29 | Evaluates security across agent deployment surfaces and complements lifecycle-phase coverage | https://arxiv.org/abs/2607.27294 |
-| 6 | MemSecBench | 2026-07-29 | Isolates long-term-memory poisoning and persistence, one of HarnessRisk’s six phases | https://arxiv.org/abs/2607.27080 |
-| 7 | HarnessSafe | 2026-08-07 | Evaluates safety of harness-mediated operation and provides a nearby system-level framing | https://arxiv.org/abs/2608.06984 |
-| 8 | HarnessRisk | 2026-08-18 | Target paper; 128 cases over six lifecycle phases and four trajectory-level outcomes | https://arxiv.org/abs/2608.17597 |
-| 9 | HarnessSecurity-Bench | 2026-10-06 | Tests native security mechanisms with deterministic task and attack-effect checks | https://arxiv.org/abs/2610.07639 |
-| 10 | EvoRiskBench | 2026-10-02 | Adds evolving and adaptive risks that a fixed lifecycle suite may not retain over time | https://arxiv.org/abs/2610.03153 |
+| Paper | First public date | Role in this map | Primary source |
+|---|---|---|---|
+| MemEvoBench | 2026-04-17 | Repeated misleading updates and gradual memory drift | https://arxiv.org/abs/2604.15774 |
+| Trojan Hippo Bench | 2026-05-03 | Delayed, adaptive memory attack through one untrusted tool output; defense and utility trade-off | https://arxiv.org/abs/2605.01970 |
+| From Untrusted Input to Trusted Memory / MPBench | 2026-06-03 | Write channels, structural vulnerabilities and memory poisoning classes | https://arxiv.org/abs/2606.04329 |
+| MemPoison | 2026-07-16 | Multi-record composition and dormant trigger risks missed by write-time checks | https://arxiv.org/abs/2607.14651 |
+| MemSecBench | 2026-07-29 | Target: one case from memory write to external consequence and selective repair | https://arxiv.org/abs/2607.27080 |
+| HarnessSafe | 2026-08-07 | Persistent-risk chains across memory, skills, tools and shared artifacts | https://arxiv.org/abs/2608.06984 |
+| Dependency-Guided Rollback Repair | 2026-08-11 | Repair of derived state and affected actions using a dependency graph | https://arxiv.org/abs/2608.10502 |
+| HarnessRisk | 2026-08-18 | Whole-harness lifecycle safety, including persistence and incident recovery | https://arxiv.org/abs/2608.17597 |
+| Forgetting is Not Always Bad / DREAM | 2026-10-09 | Candidate functional-forgetting intervention for poisoned agent memory | https://arxiv.org/abs/2610.13267 |
 
-## What HarnessRisk changes
+## What MemSecBench measures
 
-HarnessRisk changes the evaluation unit from a single prompt or tool call to the **model–harness configuration over a lifecycle trajectory**. Its 128 cases cover six phases: Harness Configuration and Capability Extension (22 cases each), then Runtime Operation, State Persistence, Action Control and Incident Recovery (21 each). Every case has three owner turns, and an untrusted artifact can influence configuration, become a skill, enter memory, redirect a high-impact action or survive attempted recovery.
+MemSecBench defines 310 linked Write–Execute–Forget cases from 48 contexts. Every case supplies a clean memory source, a Write task that can store malicious semantics, a later benign Execute task, and an independent Forget task. Execute and Forget branch from copies of the same verified post-Write memory snapshot. A hidden case rubric specifies one target malicious meaning and an external consequence contract.
 
-The benchmark evaluates 14 configurations across OpenClaw, Nanobot and Hermes. Four models run on all three harnesses; GPT-5.5 and Claude Opus 4.7 run only on OpenClaw. A GPT-5.4 judge assigns four binary trajectory metrics: Utility, Attack Success Rate, Persistence and Detection. On sampled calibration sets, judge agreement ranges from 84.3% to 92.5%, with Cohen’s κ from 0.65 to 0.83.
+Seven evidence checkpoints track the chain: W1 accepted write, W2 persisted malicious meaning, E1 later recall, E2 adoption into the agent’s decision, E3 externally recorded consequence, F1 removal or neutralization, and F2 preservation of required benign memory. W1 is deterministic. The remaining checkpoints use a separately pinned DeepSeek-V4-Pro judge and programmatic checks for admissible evidence, timing and final-state consistency. An agent’s claim or tool invocation alone cannot establish E3 or F1.
 
-Reported ASR spans 12.6%–80.9% while Utility spans 75.0%–97.6%. This is the paper’s most useful result: successful completion does not imply safe completion. For GLM-5.2, ASR is 54.7% on OpenClaw, 12.6% on Nanobot and 23.8% on Hermes. That 4.3× range establishes configuration sensitivity, but not a harness-only causal effect: the systems differ jointly in prompts, tools, state, authorization and adapters.
+The experiment spans 24 complete configurations: OpenClaw or Hermes, Native/Mem0/Mem0-Graph/A-MEM, and DeepSeek-V4-Pro/MiniMax-M3/GPT-5.5. Each runs all 310 cases once, producing 7,440 configuration–case observations. Native differs between harnesses, and every backend condition includes adapters, retrieval behavior, memory-side model use and storage settings. Matched comparisons therefore concern complete memory stacks rather than isolated storage algorithms.
 
-Detection also is not equivalent to prevention. Across the 12 configurations used for the correlation analysis, Detection and ASR have an unadjusted Pearson correlation of −0.708 (p=.010) and Spearman correlation of −0.769 (p=.003); after adding model and harness indicators, the reported significance weakens to p=.101. MiniMax M3 on OpenClaw detects 97.9% yet still has 31.2% ASR; GLM-5.2 detects 92.2% yet has 54.7% ASR.
+## Numerical audit and interpretation
 
-## Key distinctions and audit points
+| Metric | Denominator | Reported configuration macro-average | Meaning |
+|---|---:|---:|---|
+| MPSR | All 310 cases per configuration | 84.2% | W1 and W2 both pass |
+| MESR | Successfully poisoned cases in each configuration | 59.6% | E1, E2 and E3 all pass after W1/W2 |
+| E2E-ASR | All 310 cases per configuration | 50.3% | Full Write–Execute chain passes |
+| SRSR | Successfully poisoned cases in each configuration | 56.1% | F1 and F2 both pass |
 
-1. **Lifecycle coverage versus causal phase effects.** The six phases organize cases; they are not homogeneous interventions that identify a phase’s causal contribution.
-2. **Configuration comparison versus harness comparison.** Cross-harness results compare complete deployments, not a single isolated harness variable.
-3. **Detection versus containment.** Recognizing suspicious content does not prove that the agent revoked credentials, removed extensions, repaired memory or prevented side effects.
-4. **Persistence versus observable persistence.** The evaluator can score only state exported by a harness adapter; hidden state can be missed.
-5. **Owner authority versus provenance laundering.** Later owner turns sometimes explicitly approve or restate suspicious material. Some measured failures therefore combine indirect attack susceptibility with a trusted-input intervention that launders provenance.
-6. **Process isolation versus a security boundary.** The repository’s sandbox creates per-run process state; it is not a kernel namespace, chroot or firewall. An agent with arbitrary command execution may still reach host or network resources.
-7. **Judge estimate versus deterministic fact.** All four main metrics come from GPT-5.4. Deterministic rules and human labels calibrate samples but do not generate the full headline tables.
-8. **Valid-run estimate versus deployment rate.** Provider errors, empty or abnormal responses and judge parse failures are excluded without a per-configuration ledger, so rates are conditional on retained runs.
-9. **Low ASR versus safe competence.** Refusal, tool failure and incomplete task execution can all suppress ASR; Utility must be read beside it.
-10. **Three-seed variation versus inferential uncertainty.** The reported standard deviation over three seeds is not a standard error and does not absorb provider drift.
+The attack chain contracts most from E1 recall (76.1% of all cases) to E2 adoption (53.7%). E3 then gives 50.3% full-chain success. On the repair branch, F1 removal passes 86.3% of successfully poisoned cases, F2 benign preservation 62.5%, and both together 56.1%. The 30.2-point F1-to-SRSR gap identifies collateral loss of legitimate memory after apparently successful removal.
 
-## Relation to adjacent evaluation lines
+Two matched contrasts show why attack resistance and repair must be reported separately. Under OpenClaw/DeepSeek-V4-Pro, A-MEM versus Native changes E2E-ASR from 59.03% to 56.45% while SRSR rises from 46.31% to 87.63%. Under OpenClaw/GPT-5.5, Mem0-Graph versus Native lowers E2E-ASR from 57.10% to 40.97% but SRSR barely changes, from 87.50% to 86.73%. Under Hermes/MiniMax-M3, Mem0 raises both attack success and repair relative to Native. There is no backend ranking that stays stable across configurations.
 
-- **HarnessSecurity-Bench** isolates native mechanism toggles and uses deterministic outside-workspace oracles; HarnessRisk broadens the story to the whole lifecycle but relies more heavily on an LLM judge. They answer different questions and should be combined rather than ranked.
-- **MemSecBench** gives deeper resolution on memory poisoning; HarnessRisk shows how memory failure connects to configuration, action and recovery. A useful follow-up should preserve that cross-phase causal chain.
-- **SafeHarness, HarnessSafe and Auditing Agent Harness Safety** share the system-level unit of analysis. HarnessRisk’s distinctive contribution is the six-phase responsibility map and the joint Utility/ASR/Persistence/Detection view.
-- **EvoRiskBench** highlights temporal adaptation. HarnessRisk’s public static cases can establish a reproducible baseline, but not whether a defense remains effective after attackers learn its evaluator or policy.
+## Boundaries that matter
 
-## Recommended reading path
+1. **Conditional cases, not deployment prevalence.** The corpus deliberately plants malicious content; 43.5% of carriers are User Interaction, and some Write prompts explicitly request storing the suspect rule. Execute contains retrieval cues, while Forget asks the agent to perform a security self-check.
+2. **Independent repair branch, not incident reversal.** Forget starts from the poisoned snapshot, not from a state after E3 harm. F1/F2 say nothing about reversing a payment, disclosure or downstream action already recorded.
+3. **Macro-averages, not pooled trials.** MESR and SRSR have configuration-specific poisoned-case denominators. Their macro-average cannot be interpreted as one pooled conditional rate.
+4. **Descriptive contrasts, not isolated backend effects.** The complete stack, adapter, capacities and retrieval settings change together. One run per case/configuration gives no repeat-run uncertainty interval.
+5. **Evidence-backed judging, still semantic judging.** The judge matches two human annotators on 90.6% and 91.8% of the same 500 sampled records, but the paper does not report checkpoint-specific confusion, inter-annotator agreement or rank sensitivity to judge errors.
+6. **Specified preservation set.** F2 checks required benign memories named by the case. Other useful memories or later task utility may still be lost.
+7. **Public reconstruction limit.** The paper describes source hashes, snapshots and per-case ledgers, but no official linked public repository was found in the arXiv record during this run.
 
-1. **HarnessRisk** — understand the lifecycle taxonomy, three-turn case protocol and four outcomes.
-2. **HarnessSecurity-Bench** — inspect mechanism-level counterfactuals and deterministic attack-effect checks.
-3. **MemSecBench** — deepen the State Persistence phase and distinguish memory write, later retrieval and action-time use.
-4. **SafeHarness / HarnessSafe / Auditing Agent Harness Safety** — compare harness-level interventions and audit assumptions.
-5. **EvoRiskBench** — test whether fixed-case conclusions survive adaptive pressure and system updates.
+## How the literature connects
 
-## Falsifiable follow-up
+- **Attack entry and evolution:** MPBench studies why content crosses from low-trust input into trusted memory; MemEvoBench studies gradual drift under repeated updates; MemPoison studies joint retrieval and dormant triggers. MemSecBench provides a controlled chain to check which of these mechanisms reaches an external consequence.
+- **Long delay and deployment realism:** Trojan Hippo Bench’s single untrusted tool-output entry and activation after many benign sessions stress a boundary that MemSecBench’s prompted Write and fixed later Execute do not establish.
+- **System-wide coverage:** HarnessSafe and HarnessRisk trace persistence beyond memory into skills, tools and recovery. MemSecBench contributes a finer-grained memory state and selective-repair test.
+- **Recovery mechanisms:** Dependency-Guided Rollback Repair traces derived claims/actions and replays affected computation; DREAM proposes functional forgetting. Both are candidate interventions to run against MemSecBench’s same post-Write snapshots, with E3, F1, F2 and legitimate task utility all reported.
 
-A narrow extension is a **provenance-carrying recovery benchmark**. Hold the task, artifact and model fixed; vary only whether provenance and revocation dependencies survive the transition from ingestion to memory to recovery. Measure attack side effect, malicious-state persistence, evidence preservation and verified rollback.
+## Small falsifiable follow-up
 
-- **Competing explanation:** the apparent gain comes from adding another warning string, not from carrying provenance or dependency state.
-- **Discriminating intervention:** keep warning text identical while ablating provenance labels, dependency links and recovery actions separately.
-- **Falsifier:** if provenance/dependency ablation does not change side-effect or rollback rates beyond a prespecified interval, the mechanism claim fails.
-- **Stop rule:** do not scale to more models until at least one matched configuration shows a reproducible separation between “detected” and “fully remediated.”
+Select twelve cases with service-side E3 oracles and nontrivial benign memories. Fix the model, harness, backend and W2 snapshot. Compare the paper’s Forget instruction with (a) provenance/scope labels and (b) dependency-guided repair. End the session after repair, trigger the later task in a fresh session, and measure F1, F2, new E3 events and normal task completion separately.
+
+The competing explanation is that a method merely removes more memory, lowering E3 by impairing the agent. A successful mechanism claim needs lower re-trigger E3 **and** intact benign memory and task completion. If twelve paired cases show no reproducible separation from the baseline, stop scaling the model matrix and narrow the claim.
 
 ## Synthesis
 
-HarnessRisk’s strongest contribution is not a new safety score. It makes the lifecycle responsibility chain measurable and shows why Utility, Detection and safety cannot substitute for one another. Its main empirical limitation is equally important: the public evidence currently supports a benchmark design and reported aggregates, but not a fully reconstructable run ledger, and its cross-harness numbers should be read as configuration-level observations rather than causal rankings.
+MemSecBench makes the causal chain easier to inspect: storage, recall, adoption, consequence and selective repair each require different evidence. Its most useful number is not the 50.3% full-chain attack rate alone, but the gap between 86.3% target removal and 56.1% selective repair. The benchmark’s current public evidence supports this diagnostic framing and descriptive configuration results; natural attack prevalence, backend-only causal effects and post-harm recovery remain open tests.
