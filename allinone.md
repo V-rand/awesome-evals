@@ -1,75 +1,94 @@
-# Related-paper search — memory poisoning, consequence, and selective repair
+# Related-paper search — post-failure memory recovery for agents
 
-Search date: 2026-10-15 (Asia/Shanghai)
+Search date: 2026-10-16 (Asia/Shanghai)
 
 Window: 2025–2026, with original papers and official arXiv records preferred
 
-Queries: `agent memory poisoning selective repair`; `agent memory security benchmark Write Execute Forget`; `persistent agent memory attack evaluation`; `memory poisoning recovery agent benchmark`
+Queries: `agent memory rollback repair provenance dependency graph`; `post failure recovery memory augmented agents`; `selective memory repair derived state replay`; `agent memory fault correction rollback`
 
 ## Search coverage and limitations
 
-The installed six-source paper search returned 144 unique records after merging 68 cross-source duplicates: arXiv 48, OpenAlex 48, OpenReview 44, Semantic Scholar 24, Crossref 48, and DBLP 0. DBLP returned anti-bot/HTTP-429 errors, and some Semantic Scholar queries also returned HTTP 429. These are gaps in search coverage. Paper identity, first public date and abstract-level claims in the selection below were checked against official arXiv records.
+The installed multi-source search was launched against arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref, but did not produce its merged result file before the run timeout; no source counts or negative novelty claim are inferred from that incomplete pass. Paper identity, first public date and abstract-level claims below were instead checked against official arXiv records. This is a coverage limitation, not evidence that related work is absent.
 
-The target paper was read in full: 28 PDF pages were extracted and rendered, with the setup, seven checkpoint criteria, main table, figures, worked cases, backend details, runtime controls and judge protocol inspected. Adjacent papers below were checked at their primary pages; they were not all read in full. The target arXiv record does not provide a direct official code/data/replay repository link, so the reported aggregates are not independently reconstructed here.
+The target paper was read in full: its 19-page PDF was extracted and all pages rendered; the formal setup, algorithm, primary tables, ablations, per-domain/fault results, backbone transfer, LongMemEval-V2 adaptation and appendices were inspected. Adjacent papers were checked at their primary pages, not all read in full. The target arXiv record provides no direct author-linked official code/data/replay repository, so the reported tables were not independently reproduced.
 
 ## Closest primary papers
 
-| Paper | First public date | Role in this map | Primary source |
+| Paper | First public date | Distinct recovery question | Primary source |
 |---|---|---|---|
-| MemEvoBench | 2026-04-17 | Repeated misleading updates and gradual memory drift | https://arxiv.org/abs/2604.15774 |
-| Trojan Hippo Bench | 2026-05-03 | Delayed, adaptive memory attack through one untrusted tool output; defense and utility trade-off | https://arxiv.org/abs/2605.01970 |
-| From Untrusted Input to Trusted Memory / MPBench | 2026-06-03 | Write channels, structural vulnerabilities and memory poisoning classes | https://arxiv.org/abs/2606.04329 |
-| MemPoison | 2026-07-16 | Multi-record composition and dormant trigger risks missed by write-time checks | https://arxiv.org/abs/2607.14651 |
-| MemSecBench | 2026-07-29 | Target: one case from memory write to external consequence and selective repair | https://arxiv.org/abs/2607.27080 |
-| HarnessSafe | 2026-08-07 | Persistent-risk chains across memory, skills, tools and shared artifacts | https://arxiv.org/abs/2608.06984 |
-| Dependency-Guided Rollback Repair | 2026-08-11 | Repair of derived state and affected actions using a dependency graph | https://arxiv.org/abs/2608.10502 |
-| HarnessRisk | 2026-08-18 | Whole-harness lifecycle safety, including persistence and incident recovery | https://arxiv.org/abs/2608.17597 |
-| Forgetting is Not Always Bad / DREAM | 2026-10-09 | Candidate functional-forgetting intervention for poisoned agent memory | https://arxiv.org/abs/2610.13267 |
+| MemoRepair | 2026-05-08 | Can invalidated descendants be hidden before cascade repair and only validated successors republished? | https://arxiv.org/abs/2605.07242 |
+| MemSecBench | 2026-07-29 | Can a poisoned memory be followed through external consequence, then removed without deleting specified benign memory? | https://arxiv.org/abs/2607.27080 |
+| Dependency-Guided Rollback Repair | 2026-08-11 | Target: which claims, actions and derived memories lose support, and which computation should be replayed? | https://arxiv.org/abs/2608.10502 |
+| HarnessRisk | 2026-08-18 | How do persistence, detection and incident recovery behave across the harness lifecycle? | https://arxiv.org/abs/2608.17597 |
+| StateWise | 2026-10-04 | Can invalid persistent operational state be diagnosed and corrected before a coding-agent action? | https://arxiv.org/abs/2610.05241 |
+| DREAM | 2026-10-09 | Can poisoned memory be functionally forgotten through reactivation, anomaly diagnosis and attenuation? | https://arxiv.org/abs/2610.13267 |
 
-## What MemSecBench measures
+## Recovery is not one metric
 
-MemSecBench defines 310 linked Write–Execute–Forget cases from 48 contexts. Every case supplies a clean memory source, a Write task that can store malicious semantics, a later benign Execute task, and an independent Forget task. Execute and Forget branch from copies of the same verified post-Write memory snapshot. A hidden case rubric specifies one target malicious meaning and an external consequence contract.
+```text
+detect fault → block further exposure → invalidate unsupported descendants
+             → repair active memory → replay necessary computation
+             → regenerate answer → retest future triggers
+             → compensate reversible external effects
+```
 
-Seven evidence checkpoints track the chain: W1 accepted write, W2 persisted malicious meaning, E1 later recall, E2 adoption into the agent’s decision, E3 externally recorded consequence, F1 removal or neutralization, and F2 preservation of required benign memory. W1 is deterministic. The remaining checkpoints use a separately pinned DeepSeek-V4-Pro judge and programmatic checks for admissible evidence, timing and final-state consistency. An agent’s claim or tool invocation alone cannot establish E3 or F1.
+Different papers intervene at different edges. MemoRepair focuses on visibility during cascade repair; StateWise repairs before action; Dependency-Guided Rollback starts after a failed execution; DREAM suppresses poisoned memory; MemSecBench audits persistence, consequence and selective deletion. Their headline percentages are not comparable without the same fault oracle, trace, tool semantics, persistence store and re-trigger protocol.
 
-The experiment spans 24 complete configurations: OpenClaw or Hermes, Native/Mem0/Mem0-Graph/A-MEM, and DeepSeek-V4-Pro/MiniMax-M3/GPT-5.5. Each runs all 310 cases once, producing 7,440 configuration–case observations. Native differs between harnesses, and every backend condition includes adapters, retrieval behavior, memory-side model use and storage settings. Matched comparisons therefore concern complete memory stacks rather than isolated storage algorithms.
+## Target mechanism
 
-## Numerical audit and interpretation
+The target assumes exact faulty-memory IDs and an instrumented runtime. It builds a typed graph over memory, claims, plans, actions, observations, answers and mutations, using explicit provenance rather than temporal adjacency. Forward tracing creates an over-approximate affected set. An independent-support pass preserves candidates whose complete content still has trusted support outside the affected set. Faulty memories are deleted, unsupported derived memories quarantined, unsupported trace nodes invalidated, and answer-relevant executable closure replayed in original order. The final answer is always regenerated.
 
-| Metric | Denominator | Reported configuration macro-average | Meaning |
-|---|---:|---:|---|
-| MPSR | All 310 cases per configuration | 84.2% | W1 and W2 both pass |
-| MESR | Successfully poisoned cases in each configuration | 59.6% | E1, E2 and E3 all pass after W1/W2 |
-| E2E-ASR | All 310 cases per configuration | 50.3% | Full Write–Execute chain passes |
-| SRSR | Successfully poisoned cases in each configuration | 56.1% | F1 and F2 both pass |
+The graph contracts the rollback surface but does not undo irreversible actions. Replay needs resettable, idempotent or compensating tools. Missing provenance and imperfect fault diagnosis are outside the primary evaluation.
 
-The attack chain contracts most from E1 recall (76.1% of all cases) to E2 adoption (53.7%). E3 then gives 50.3% full-chain success. On the repair branch, F1 removal passes 86.3% of successfully poisoned cases, F2 benign preservation 62.5%, and both together 56.1%. The 30.2-point F1-to-SRSR gap identifies collateral loss of legitimate memory after apparently successful removal.
+## Experimental audit
 
-Two matched contrasts show why attack resistance and repair must be reported separately. Under OpenClaw/DeepSeek-V4-Pro, A-MEM versus Native changes E2E-ASR from 59.03% to 56.45% while SRSR rises from 46.31% to 87.63%. Under OpenClaw/GPT-5.5, Mem0-Graph versus Native lowers E2E-ASR from 57.10% to 40.97% but SRSR barely changes, from 87.50% to 86.73%. Under Hermes/MiniMax-M3, Mem0 raises both attack success and repair relative to Native. There is no backend ranking that stays stable across configurations.
+The controlled set has 150 conditioned cases across shopping, travel and customer support, with poisoned, stale, wrong-user and summary-drift faults. Cases are retained only if injection changes the answer and has a downstream effect. All methods receive exact fault IDs; clean traces and labels remain evaluation-only. Primary metrics are answer recovery, recurrence after rerunning the final input, fault removal, benign preservation, claim-invalidation F1, replay ratio and LLM calls.
 
-## Boundaries that matter
+| Method | Recovery | Recurrence | Fault removal | Benign preservation | Claim F1 | Replay | Calls |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| LLM-judge repair | 77.3% | **12.1%** | 100% | 100% | **0.946** | 0.217 | 9.80 |
+| AgentTrace-style | 60.7% | 34.1% | 0% | 99.7% | 0.853 | 0.091 | 4.69 |
+| Dependency-guided | **85.3%** | 26.6% | 100% | 100% | 0.566 | 0.123 | 5.70 |
 
-1. **Conditional cases, not deployment prevalence.** The corpus deliberately plants malicious content; 43.5% of carriers are User Interaction, and some Write prompts explicitly request storing the suspect rule. Execute contains retrieval cues, while Forget asks the agent to perform a security self-check.
-2. **Independent repair branch, not incident reversal.** Forget starts from the poisoned snapshot, not from a state after E3 harm. F1/F2 say nothing about reversing a payment, disclosure or downstream action already recorded.
-3. **Macro-averages, not pooled trials.** MESR and SRSR have configuration-specific poisoned-case denominators. Their macro-average cannot be interpreted as one pooled conditional rate.
-4. **Descriptive contrasts, not isolated backend effects.** The complete stack, adapter, capacities and retrieval settings change together. One run per case/configuration gives no repeat-run uncertainty interval.
-5. **Evidence-backed judging, still semantic judging.** The judge matches two human annotators on 90.6% and 91.8% of the same 500 sampled records, but the paper does not report checkpoint-specific confusion, inter-annotator agreement or rank sensitivity to judge errors.
-6. **Specified preservation set.** F2 checks required benign memories named by the case. Other useful memories or later task utility may still be lost.
-7. **Public reconstruction limit.** The paper describes source hashes, snapshots and per-case ledgers, but no official linked public repository was found in the arXiv record during this run.
+The target leads immediate recovery, but not recurrence or claim localization. Its clearest trade-off appears in the ablation: replacing selective replay with broad replay changes recovery only from 85.3% to 84.0%, while recurrence improves from 26.6% to 7.1%; replay ratio rises from 0.123 to 0.755 and calls from 5.70 to 24.01. Selective replay is therefore an efficiency mechanism with a visible recurrence cost.
 
-## How the literature connects
+Stale faults expose the main weakness: 94.1% immediate recovery but 78.1% recurrence. Across model backbones, the target beats the closest LLM-judge baseline on GPT-4o and Qwen3.6-27B, but not on Gemini-3.6-Flash (73.3% versus 74.0%). The 50-case selected LongMemEval-V2 stress subset gives 68.0% recovery; this is not a full-benchmark result.
 
-- **Attack entry and evolution:** MPBench studies why content crosses from low-trust input into trusted memory; MemEvoBench studies gradual drift under repeated updates; MemPoison studies joint retrieval and dormant triggers. MemSecBench provides a controlled chain to check which of these mechanisms reaches an external consequence.
-- **Long delay and deployment realism:** Trojan Hippo Bench’s single untrusted tool-output entry and activation after many benign sessions stress a boundary that MemSecBench’s prompted Write and fixed later Execute do not establish.
-- **System-wide coverage:** HarnessSafe and HarnessRisk trace persistence beyond memory into skills, tools and recovery. MemSecBench contributes a finer-grained memory state and selective-repair test.
-- **Recovery mechanisms:** Dependency-Guided Rollback Repair traces derived claims/actions and replays affected computation; DREAM proposes functional forgetting. Both are candidate interventions to run against MemSecBench’s same post-Write snapshots, with E3, F1, F2 and legitimate task utility all reported.
+## Evidence levels
+
+### Directly supported by the paper
+
+- Under exact fault IDs, complete runtime provenance and controlled tools, dependency-guided rollback reaches 85.3% immediate recovery on the conditioned 150-case set.
+- It removes all diagnosed faulty memories and preserves all labelled benign memories in that set, but recurrence remains 26.6%.
+- Selective replay reduces cost sharply; full replay produces a much lower recurrence rate.
+- The method cannot undo irreversible external side effects and does not evaluate fault detection.
+
+### Reasonable inferences
+
+- Recovery evaluation should separately report current answer, persistent state, descendant invalidation, future recurrence and external-world compensation.
+- Typed provenance can reduce unnecessary rollback, but incomplete logging is likely a safety-critical failure mode.
+- Version, temporal scope and authority should be first-class memory relations, because stale records recur even after strong immediate recovery.
+
+### Hypotheses requiring experiments
+
+- The advantage may collapse under modest fault-ID false negatives or missing graph edges.
+- Barrier-first quarantine plus dependency-guided replay may reduce exposure without requiring full replay.
+- A longer natural re-trigger suite may reverse method rankings obtained from rerunning only the final input.
+
+## Literature boundary
+
+- **MemoRepair** supplies a repair contract: withdraw affected descendants first, then publish only validated predecessor-closed successors. It addresses exposure during repair more directly than the target; the target gives a concrete failed-trace replay planner.
+- **MemSecBench** gives evidence checkpoints from memory persistence to external consequence and F1/F2 selective repair. The target provides the missing descendant/action repair mechanism, but needs MemSecBench-style post-repair E3 retesting.
+- **StateWise** performs record-level counterfactual diagnosis, read-only verification and intent clarification before action. Its 93.3% coding-case headline is not comparable to post-failure recovery; together they define prevention and residual recovery.
+- **DREAM** combines detection and functional forgetting, whereas the target assumes diagnosed IDs and repairs derived computation. A shared poisoned snapshot and multi-session recurrence test is needed.
+- **HarnessRisk/HarnessSafe** broaden the carrier set beyond memory. The target graph should eventually span skills, configuration, tools and shared artifacts before it can support whole-harness recovery claims.
 
 ## Small falsifiable follow-up
 
-Select twelve cases with service-side E3 oracles and nontrivial benign memories. Fix the model, harness, backend and W2 snapshot. Compare the paper’s Forget instruction with (a) provenance/scope labels and (b) dependency-guided repair. End the session after repair, trigger the later task in a fresh session, and measure F1, F2, new E3 events and normal task completion separately.
+Use twelve MemSecBench cases with deterministic E3 service oracles, at least two benign memories and observable derived state. From the same verified W2 snapshot compare original Forget, dependency rollback, and dependency rollback plus barrier-first quarantine. End the repair session and use three new natural tasks to re-trigger the fault. Report removal, benign preservation, answer recovery, future E3, exposure window and cost separately.
 
-The competing explanation is that a method merely removes more memory, lowering E3 by impairing the agent. A successful mechanism claim needs lower re-trigger E3 **and** intact benign memory and task completion. If twelve paired cases show no reproducible separation from the baseline, stop scaling the model matrix and narrow the claim.
+Then remove 10% and 30% of provenance edges and hide one faulty memory ID. If the method no longer separates from broad replay on future E3 and legitimate-task completion, stop scaling the model matrix and narrow the claim to cost optimization under complete provenance.
 
 ## Synthesis
 
-MemSecBench makes the causal chain easier to inspect: storage, recall, adoption, consequence and selective repair each require different evidence. Its most useful number is not the 50.3% full-chain attack rate alone, but the gap between 86.3% target removal and 56.1% selective repair. The benchmark’s current public evidence supports this diagnostic framing and descriptive configuration results; natural attack prevalence, backend-only causal effects and post-harm recovery remain open tests.
+Dependency-guided rollback turns memory repair from deleting a record into repairing a computation and its persistent descendants. That is the conceptual advance. The numerical record is deliberately mixed: best immediate recovery and exact labelled-state preservation, but weaker recurrence and claim localization than the best LLM-judge baseline, with particularly severe stale-state recurrence. A trustworthy recovery benchmark must keep these outcomes separate and add imperfect diagnosis, incomplete provenance and external-effect compensation before making deployment claims.
