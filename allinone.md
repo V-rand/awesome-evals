@@ -1,94 +1,120 @@
-# Related-paper search — post-failure memory recovery for agents
+# Related-paper search — barrier-first cascade repair for agent memory
 
-Search date: 2026-10-16 (Asia/Shanghai)
+Search date: 2026-10-17 (Asia/Shanghai)
 
 Window: 2025–2026, with original papers and official arXiv records preferred
 
-Queries: `agent memory rollback repair provenance dependency graph`; `post failure recovery memory augmented agents`; `selective memory repair derived state replay`; `agent memory fault correction rollback`
+Queries: `agentic memory cascade repair provenance`; `memory invalidation derived artifacts agents`; `barrier first repair agent memory`; `memory lineage repair LLM agents`
 
-## Search coverage and limitations
+## Search coverage and reading status
 
-The installed multi-source search was launched against arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref, but did not produce its merged result file before the run timeout; no source counts or negative novelty claim are inferred from that incomplete pass. Paper identity, first public date and abstract-level claims below were instead checked against official arXiv records. This is a coverage limitation, not evidence that related work is absent.
+The six-source paper-search process was launched against arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref, but did not produce its merged JSON before the run timeout. No source counts or negative novelty claim are inferred from that incomplete pass. Identities, first public dates and abstract-level claims below were separately checked against official arXiv records.
 
-The target paper was read in full: its 19-page PDF was extracted and all pages rendered; the formal setup, algorithm, primary tables, ablations, per-domain/fault results, backbone transfer, LongMemEval-V2 adaptation and appendices were inspected. Adjacent papers were checked at their primary pages, not all read in full. The target arXiv record provides no direct author-linked official code/data/replay repository, so the reported tables were not independently reproduced.
+The 12-page target PDF was read completely, extracted, rendered page by page, and visually checked at the formal definition, algorithm, main tables, parametric-repair result, selector frontier, robustness ablation and limitations. Adjacent papers were checked at primary pages but not all read in full. No author-linked code, event corpus or result ledger is present on the target arXiv page.
 
 ## Closest primary papers
 
-| Paper | First public date | Distinct recovery question | Primary source |
+| Paper | First public date | Distinct role | Primary source |
 |---|---|---|---|
-| MemoRepair | 2026-05-08 | Can invalidated descendants be hidden before cascade repair and only validated successors republished? | https://arxiv.org/abs/2605.07242 |
-| MemSecBench | 2026-07-29 | Can a poisoned memory be followed through external consequence, then removed without deleting specified benign memory? | https://arxiv.org/abs/2607.27080 |
-| Dependency-Guided Rollback Repair | 2026-08-11 | Target: which claims, actions and derived memories lose support, and which computation should be replayed? | https://arxiv.org/abs/2608.10502 |
-| HarnessRisk | 2026-08-18 | How do persistence, detection and incident recovery behave across the harness lifecycle? | https://arxiv.org/abs/2608.17597 |
-| StateWise | 2026-10-04 | Can invalid persistent operational state be diagnosed and corrected before a coding-agent action? | https://arxiv.org/abs/2610.05241 |
-| DREAM | 2026-10-09 | Can poisoned memory be functionally forgotten through reactivation, anomaly diagnosis and attenuation? | https://arxiv.org/abs/2610.13267 |
+| Agentic Unlearning | 2026-02-06 | Joint parameter–memory unlearning and backflow control | https://arxiv.org/abs/2602.17692 |
+| TierMem / From Lossy to Verified | 2026-02-20 | Provenance-linked summary/raw hierarchy and evidence escalation | https://arxiv.org/abs/2602.17913 |
+| MEMOREPAIR | 2026-05-08 | Target: withdraw affected descendants before repair and republish a validated closure | https://arxiv.org/abs/2605.07242 |
+| MemSecBench | 2026-07-29 | Persistence, external consequence and selective memory repair checkpoints | https://arxiv.org/abs/2607.27080 |
+| Dependency-Guided Rollback Repair | 2026-08-11 | Failed-trace invalidation and selective replay | https://arxiv.org/abs/2608.10502 |
+| StateWise | 2026-10-04 | Pre-action diagnosis and correction of persistent operational state | https://arxiv.org/abs/2610.05241 |
+| DREAM | 2026-10-09 | Detection and functional forgetting of poisoned memory | https://arxiv.org/abs/2610.13267 |
 
-## Recovery is not one metric
+## The problem shift
+
+Deleting or correcting a source does not automatically invalidate summaries, cached outputs, prompt skills, executable procedures or neural skills derived from it. MEMOREPAIR treats this as a cascade-update problem. Its strongest conceptual move is temporal: a stale descendant should not remain available while its replacement is being built.
 
 ```text
-detect fault → block further exposure → invalidate unsupported descendants
-             → repair active memory → replay necessary computation
-             → regenerate answer → retest future triggers
-             → compensate reversible external effects
+root delete / correction / migration
+        ↓ influence provenance closure
+withdraw root + descendants from service
+        ↓ artifact-specific recompute / regenerate / parameter repair
+validate candidates in dependency order
+        ↓ predecessor-closed publication
+republish only a consistent successor set
 ```
 
-Different papers intervene at different edges. MemoRepair focuses on visibility during cascade repair; StateWise repairs before action; Dependency-Guided Rollback starts after a failed execution; DREAM suppresses poisoned memory; MemSecBench audits persistence, consequence and selective deletion. Their headline percentages are not comparable without the same fault oracle, trace, tool semantics, persistence store and re-trigger protocol.
+This is a commit protocol for visible memory state, not an end-to-end detector or external-action rollback mechanism.
 
-## Target mechanism
+## Mechanism audit
 
-The target assumes exact faulty-memory IDs and an instrumented runtime. It builds a typed graph over memory, claims, plans, actions, observations, answers and mutations, using explicit provenance rather than temporal adjacency. Forward tracing creates an over-approximate affected set. An independent-support pass preserves candidates whose complete content still has trusted support outside the affected set. Faulty memories are deleted, unsupported derived memories quarantined, unsupported trace nodes invalidated, and answer-relevant executable closure replayed in original order. The final answer is always regenerated.
+The graph separates influence edges, which define repair scope, from semantic edges, which only support retrieval. A repair event supplies invalid roots, event type and replacement/migration information. Every provenance-reachable artifact is withdrawn. Descendants are assigned `recompute`, `regen`, `param` or `remove`; each candidate carries a repair operator, repaired-predecessor set, executability, value and cost.
 
-The graph contracts the rollback surface but does not undo irreversible actions. Replay needs resettable, idempotent or compensating tools. Missing provenance and imperfect fault diagnosis are outside the primary evaluation.
+For fixed trade-off `λ`, publication maximizes total value minus `λ` times cost, under executability and predecessor-closure constraints. This is maximum-weight closure and reduces to one `s-t` min-cut. The graph-cut algorithm is classical; the paper’s contribution is the barrier/candidate/validation contract that creates this optimization problem.
 
-## Experimental audit
+Failures remain withdrawn, as do candidates depending on them. The contract covers artifact visibility and publication. It does not reverse an already sent message, payment, permission change or data disclosure.
 
-The controlled set has 150 conditioned cases across shopping, travel and customer support, with poisoned, stale, wrong-user and summary-drift faults. Cases are retained only if injection changes the answer and has a downstream effect. All methods receive exact fault IDs; clean traces and labels remain evaluation-only. Primary metrics are answer recovery, recurrence after rerunning the final input, fault removal, benign preservation, claim-invalidation F1, replay ratio and LLM calls.
+## What the numbers actually establish
 
-| Method | Recovery | Recurrence | Fault removal | Benign preservation | Claim F1 | Replay | Calls |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| LLM-judge repair | 77.3% | **12.1%** | 100% | 100% | **0.946** | 0.217 | 9.80 |
-| AgentTrace-style | 60.7% | 34.1% | 0% | 99.7% | 0.853 | 0.091 | 4.69 |
-| Dependency-guided | **85.3%** | 26.6% | 100% | 100% | 0.566 | 0.123 | 5.70 |
+On ToolBench and MemoryArena, all barrier-based internal policies have 0% Leak and 0% Stale-use under complete provenance. This is mainly the contract operating as specified, not a learned system discovering the cascade. The empirical selector question is how much validated publication is recovered at what operator cost.
 
-The target leads immediate recovery, but not recurrence or claim localization. Its clearest trade-off appears in the ablation: replacing selective replay with broad replay changes recovery only from 85.3% to 84.0%, while recurrence improves from 26.6% to 7.1%; replay ratio rises from 0.123 to 0.755 and calls from 5.70 to 24.01. Selective replay is therefore an efficiency mechanism with a visible recurrence cost.
+| Benchmark / event | Repair-all publication ceiling | MEMOREPAIR publication | Cost | Difference in diagnostic ΔTask |
+|---|---:|---:|---:|---:|
+| ToolBench delete | 24.6% | 22.4% | 0.61 | -0.06 pt |
+| ToolBench correct | 48.8% | 45.1% | 0.57 | -0.06 pt |
+| ToolBench migrate | 38.7% | 36.5% | 0.66 | -0.08 pt |
+| MemoryArena delete | 5.5% | 5.1% | 0.62 | -0.05 pt |
+| MemoryArena correct | 35.6% | 33.1% | 0.76 | -0.07 pt |
+| MemoryArena migrate | 18.4% | 17.0% | 0.64 | -0.05 pt |
 
-Stale faults expose the main weakness: 94.1% immediate recovery but 78.1% recurrence. Across model backbones, the target beats the closest LLM-judge baseline on GPT-4o and Qwen3.6-27B, but not on Gemini-3.6-Flash (73.3% versus 74.0%). The 50-case selected LongMemEval-V2 stress subset gives 68.0% recovery; this is not a full-benchmark result.
+Thus the reported 91.1%–94.3% refers to the fraction of the paper’s validated `Repair all` ceiling recovered, not the fraction of all lost system capability restored. `Rep.%` is over non-remove contracts. MemoryArena deletion, for example, republishes only 5.1% in absolute terms.
 
-## Evidence levels
+`ΔTask` is not native ToolBench or MemoryArena task success. It is constructed from the fraction of task-used artifacts lacking validated successors and the fraction whose stale versions remain visible. It shares state signals with Leak/Stale and cannot independently prove end-to-end task correctness.
 
-### Directly supported by the paper
+Six cascade-unaware memory systems leave 69.8%–94.3% of affected artifacts leakable and 92.4%–99.7% of post-event actions stale across the two benchmarks. They are reference points under native semantics, not equal-contract repair baselines: they are not given the target barrier, validator or successor publication mechanism.
 
-- Under exact fault IDs, complete runtime provenance and controlled tools, dependency-guided rollback reaches 85.3% immediate recovery on the conditioned 150-case set.
-- It removes all diagnosed faulty memories and preserves all labelled benign memories in that set, but recurrence remains 26.6%.
-- Selective replay reduces cost sharply; full replay produces a much lower recurrence rate.
-- The method cannot undo irreversible external side effects and does not evaluate fault detection.
+## The most important counter-result
 
-### Reasonable inferences
+Dropping only 1% of influence edges produces 17.7% Leak and 19.7% Stale-use; 5% edge drop produces 61.8% and 68.5%. The contract is therefore highly sensitive to provenance recall. Its 0% headline should always be stated with the complete-provenance premise.
 
-- Recovery evaluation should separately report current answer, persistent state, descendant invalidation, future recurrence and external-world compensation.
-- Typed provenance can reduce unnecessary rollback, but incomplete logging is likely a safety-critical failure mode.
-- Version, temporal scope and authority should be first-class memory relations, because stale records recur even after strong immediate recovery.
+The validation oracle is similarly decisive. Schema-only checking false-passes 88.6% stale use; task-regression-only false-passes 29.8%; the composed checker reaches zero on the constructed test. Passing these checks still does not prove correctness in all future contexts.
 
-### Hypotheses requiring experiments
+## Evidence boundary
 
-- The advantage may collapse under modest fault-ID false negatives or missing graph edges.
-- Barrier-first quarantine plus dependency-guided replay may reduce exposure without requiring full replay.
-- A longer natural re-trigger suite may reverse method rankings obtained from rerunning only the final input.
+### Directly supported
 
-## Literature boundary
+- Barrier-first withdrawal eliminates repair-interval/post-repair serving of the known cascade when roots and influence closure are complete.
+- The exact selector recovers close to the exhaustive validated-publication ceiling with 0.57–0.76 normalized operator cost at `λ=0.3`.
+- Store-level cascade repair and parameter unlearning address different persistence paths and combine better than either alone in the neural-skill subset.
+- Small provenance omissions strongly amplify into uncovered stale descendants.
 
-- **MemoRepair** supplies a repair contract: withdraw affected descendants first, then publish only validated predecessor-closed successors. It addresses exposure during repair more directly than the target; the target gives a concrete failed-trace replay planner.
-- **MemSecBench** gives evidence checkpoints from memory persistence to external consequence and F1/F2 selective repair. The target provides the missing descendant/action repair mechanism, but needs MemSecBench-style post-repair E3 retesting.
-- **StateWise** performs record-level counterfactual diagnosis, read-only verification and intent clarification before action. Its 93.3% coding-case headline is not comparable to post-failure recovery; together they define prevention and residual recovery.
-- **DREAM** combines detection and functional forgetting, whereas the target assumes diagnosed IDs and repairs derived computation. A shared poisoned snapshot and multi-session recurrence test is needed.
-- **HarnessRisk/HarnessSafe** broaden the carrier set beyond memory. The target graph should eventually span skills, configuration, tools and shared artifacts before it can support whole-harness recovery claims.
+### Reasonable inference
+
+- Visibility withdrawal and successor construction should be separate states in a safe memory lifecycle.
+- A provenance graph is a safety-critical control structure, not optional observability metadata.
+- Dependency-guided rollback can operate inside a barrier-first transaction, with predecessor-closed publication as the commit step.
+
+### Untested hypotheses
+
+- The selector remains advantageous under native benchmark task success, realistic event distributions and structural provenance errors.
+- A production harness can enforce the barrier atomically across replicas, caches, tools and in-flight actions.
+- Held-out future triggers agree with the paper’s validation oracle.
+
+## Major reporting gaps
+
+The paper does not state the number of repair events, per-event-type counts, detailed cascade-size distribution, event-generation/filtering process, or uncertainty for Tables 1–2. Only the selector frontier explicitly reports three seeds. It does not publish code or the min-cut inputs/validators. Value and cost assignment are insufficiently specified for independent reconstruction.
+
+The diagnostic task metric, complete-provenance premise and unequal external baselines mean the evidence supports a clean repair contract and a selector result under that contract. It does not yet establish deployment prevalence, autonomous invalid-root detection, native end-to-end task recovery or reversal of external harm.
+
+## Relationship to recent work
+
+- **Agentic Unlearning** jointly suppresses parameter and memory pathways; MEMOREPAIR refines the store-side publication contract and can host a parameter operator.
+- **TierMem** preserves links from verified summaries to immutable raw evidence; those links are infrastructure for later cascade correction when a source changes.
+- **MemSecBench** supplies write/execution/consequence/repair checkpoints and a service-side E3 oracle. It can test whether zero store exposure actually prevents future external consequences.
+- **Dependency-Guided Rollback Repair** decides which claims, actions and derived memories to invalidate/replay after failure. MEMOREPAIR defines what must be hidden before that computation finishes and how successors commit.
+- **StateWise** attacks the missing diagnosis stage before a coding action; its repair lineage could be tested as the influence graph feeding a barrier.
+- **DREAM** detects and attenuates poisoned memory. A shared snapshot, held-out triggers, availability and external-action oracle are required for comparison.
 
 ## Small falsifiable follow-up
 
-Use twelve MemSecBench cases with deterministic E3 service oracles, at least two benign memories and observable derived state. From the same verified W2 snapshot compare original Forget, dependency rollback, and dependency rollback plus barrier-first quarantine. End the repair session and use three new natural tasks to re-trigger the fault. Report removal, benign preservation, answer recovery, future E3, exposure window and cost separately.
+Instrument twelve MemSecBench cases with at least two descendant layers. Compare in-place deletion, barrier plus exhaustive repair, and barrier plus min-cut plus dependency rollback. During repair, issue concurrent benign and trigger requests; after repair, start a fresh session and inspect service-side E3.
 
-Then remove 10% and 30% of provenance edges and hide one faulty memory ID. If the method no longer separates from broad replay on future E3 and legitimate-task completion, stop scaling the model matrix and narrow the claim to cost optimization under complete provenance.
+Report barrier latency, in-flight stale actions, withdrawal duration, native task completion, F1/F2, future E3 and total operator/token cost. Drop 1% of high-out-degree edges separately from 1% random edges. If min-cut does not improve the safety–availability frontier over exhaustive repair once native task success and structural missing edges are included, stop scaling models and retain only the barrier-first contract claim.
 
 ## Synthesis
 
-Dependency-guided rollback turns memory repair from deleting a record into repairing a computation and its persistent descendants. That is the conceptual advance. The numerical record is deliberately mixed: best immediate recovery and exact labelled-state preservation, but weaker recurrence and claim localization than the best LLM-judge baseline, with particularly severe stale-state recurrence. A trustworthy recovery benchmark must keep these outcomes separate and add imperfect diagnosis, incomplete provenance and external-effect compensation before making deployment claims.
+MEMOREPAIR’s durable contribution is the transaction boundary: invalidate visibility first, then reconstruct and atomically republish a validated dependency closure. The min-cut selector is useful inside that boundary. The paper’s own robustness table also points to the harder research problem: complete and trustworthy influence provenance. Without it, a small logging omission can leave a large part of the stale cascade outside the barrier.
