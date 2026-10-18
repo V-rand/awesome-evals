@@ -1,120 +1,125 @@
-# Related-paper search — barrier-first cascade repair for agent memory
+# Related-paper search — provenance-aware tiered memory for agents
 
-Search date: 2026-10-17 (Asia/Shanghai)
+Search date: 2026-10-18 (Asia/Shanghai)
 
-Window: 2025–2026, with original papers and official arXiv records preferred
+Window: 2025–2026, with original papers and official pages preferred
 
-Queries: `agentic memory cascade repair provenance`; `memory invalidation derived artifacts agents`; `barrier first repair agent memory`; `memory lineage repair LLM agents`
+Queries: `provenance aware agent memory evidence sufficiency`; `tiered memory raw logs summaries agents`; `write before query memory compression agents`
 
 ## Search coverage and reading status
 
-The six-source paper-search process was launched against arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref, but did not produce its merged JSON before the run timeout. No source counts or negative novelty claim are inferred from that incomplete pass. Identities, first public dates and abstract-level claims below were separately checked against official arXiv records.
+The six-source process was launched against arXiv, DBLP, OpenAlex, OpenReview, Semantic Scholar and Crossref, but did not return merged JSON before the timeout and was stopped. No source counts or negative novelty claim are inferred from this incomplete pass. Identities, dates and abstract-level claims below were separately checked against official arXiv records.
 
-The 12-page target PDF was read completely, extracted, rendered page by page, and visually checked at the formal definition, algorithm, main tables, parametric-repair result, selector frontier, robustness ablation and limitations. Adjacent papers were checked at primary pages but not all read in full. No author-linked code, event corpus or result ledger is present on the target arXiv page.
+The 22-page target arXiv v1 PDF was read completely, extracted, rendered page by page, and visually checked at the architecture, main tables, router/provenance ablations, consolidation, error analysis and prompts. The official repository was audited at commit `7a9b71f6389a9f8caa83c47aff5191921c6a82ca`. Adjacent papers were checked at primary pages but not all read in full.
+
+GitHub now labels TierMem as accepted at COLM 2026 under the updated title *Balancing Compressed Memory and Raw Evidence for Long-Horizon Agent Memory*. This numerical audit remains tied to the earlier arXiv v1: arXiv has not been revised and OpenReview was blocked by browser verification during this run.
 
 ## Closest primary papers
 
 | Paper | First public date | Distinct role | Primary source |
 |---|---|---|---|
-| Agentic Unlearning | 2026-02-06 | Joint parameter–memory unlearning and backflow control | https://arxiv.org/abs/2602.17692 |
-| TierMem / From Lossy to Verified | 2026-02-20 | Provenance-linked summary/raw hierarchy and evidence escalation | https://arxiv.org/abs/2602.17913 |
-| MEMOREPAIR | 2026-05-08 | Target: withdraw affected descendants before repair and republish a validated closure | https://arxiv.org/abs/2605.07242 |
-| MemSecBench | 2026-07-29 | Persistence, external consequence and selective memory repair checkpoints | https://arxiv.org/abs/2607.27080 |
-| Dependency-Guided Rollback Repair | 2026-08-11 | Failed-trace invalidation and selective replay | https://arxiv.org/abs/2608.10502 |
-| StateWise | 2026-10-04 | Pre-action diagnosis and correction of persistent operational state | https://arxiv.org/abs/2610.05241 |
-| DREAM | 2026-10-09 | Detection and functional forgetting of poisoned memory | https://arxiv.org/abs/2610.13267 |
+| ACON | 2025-10-01 | Optimize query-agnostic compression from failure analysis | https://arxiv.org/abs/2510.00615 |
+| Goal-Directed Search / SUMER | 2025-11-20 | Learn to search uncompressed memory for a known goal | https://arxiv.org/abs/2511.21726 |
+| Recursive Language Models | 2025-12-31 | Treat long input as an external environment | https://arxiv.org/abs/2512.24601 |
+| TierMem | 2026-02-20 | Target: route between source-linked summaries and immutable raw evidence | https://arxiv.org/abs/2602.17913 |
+| MEMOREPAIR | 2026-05-08 | Withdraw descendants when a source becomes invalid | https://arxiv.org/abs/2605.07242 |
+| Dependency-Guided Rollback Repair | 2026-08-11 | Invalidate failed derivations and selectively replay | https://arxiv.org/abs/2608.10502 |
 
 ## The problem shift
 
-Deleting or correcting a source does not automatically invalidate summaries, cached outputs, prompt skills, executable procedures or neural skills derived from it. MEMOREPAIR treats this as a cascade-update problem. Its strongest conceptual move is temporal: a stale descendant should not remain available while its replacement is being built.
+The future query is unknown when an agent compresses its history. A summary may omit the allergy, version, date, exception or exact tool output later needed. Once absent from the summary representation, better semantic retrieval cannot recover it.
+
+TierMem reframes memory access as inference-time evidence allocation:
 
 ```text
-root delete / correction / migration
-        ↓ influence provenance closure
-withdraw root + descendants from service
-        ↓ artifact-specific recompute / regenerate / parameter repair
-validate candidates in dependency order
-        ↓ predecessor-closed publication
-republish only a consistent successor set
+immutable raw pages
+      ↓ deterministic source pointers
+retrievable summaries / facts
+      ↓ query + retrieved evidence
+sufficiency router ── enough ──→ answer cheaply
+      │
+      └─ insufficient → linked raw pages → bounded extra search → answer
+                                              ↓
+                                   verified fact write-back
 ```
 
-This is a commit protocol for visible memory state, not an end-to-end detector or external-action rollback mechanism.
+The summary is a cache/navigation layer; the raw log remains the authoritative evidence store.
 
 ## Mechanism audit
 
-The graph separates influence edges, which define repair scope, from semantic edges, which only support retrieval. A repair event supplies invalid roots, event type and replacement/migration information. Every provenance-reachable artifact is withdrawn. Descendants are assigned `recompute`, `regen`, `param` or `remove`; each candidate carries a repair operator, repaired-predecessor set, executability, value and cost.
+Tier-2 stores canonical interaction pages of roughly 1,000 tokens with stable IDs. Tier-1 stores summaries/embeddings plus pointers. A Qwen3-0.6B router selects summary answer or raw escalation. Escalation first opens linked pages, then performs at most three semantic-plus-BM25 retrieve/integrate/plan rounds.
 
-For fixed trade-off `λ`, publication maximizes total value minus `λ` times cost, under executability and predecessor-closure constraints. This is maximum-weight closure and reduces to one `s-t` min-cut. The graph-cut algorithm is classical; the paper’s contribution is the barrier/candidate/validation contract that creates this optimization problem.
+The model extracts facts and evidence quotes, but deterministic substring/keyword matching assigns page provenance. Verified findings can be added or update existing summary units; UPDATE inherits old and new pointers.
 
-Failures remain withdrawn, as do candidates depending on them. The contract covers artifact visibility and publication. It does not reverse an already sent message, payment, permission change or data disclosure.
+Router labels come from paired summary/raw executions. Summary-correct cases are S; summary-wrong/raw-correct cases are R; both-fail and raw-fail cases are removed. SFT uses GPT-5 teacher traces, followed by GRPO with correctness, cost, unnecessary-escalation and format rewards. This trains a recoverability-conditioned router, not a detector of every memory failure.
 
-## What the numbers actually establish
+## What the numbers establish
 
-On ToolBench and MemoryArena, all barrier-based internal policies have 0% Leak and 0% Stale-use under complete provenance. This is mainly the contract operating as specified, not a learned system discovering the cascade. The empirical selector question is how much validated publication is recovered at what operator cost.
-
-| Benchmark / event | Repair-all publication ceiling | MEMOREPAIR publication | Cost | Difference in diagnostic ΔTask |
+| Benchmark / path | Accuracy | QA input | Router input | Latency |
 |---|---:|---:|---:|---:|
-| ToolBench delete | 24.6% | 22.4% | 0.61 | -0.06 pt |
-| ToolBench correct | 48.8% | 45.1% | 0.57 | -0.06 pt |
-| ToolBench migrate | 38.7% | 36.5% | 0.66 | -0.08 pt |
-| MemoryArena delete | 5.5% | 5.1% | 0.62 | -0.05 pt |
-| MemoryArena correct | 35.6% | 33.1% | 0.76 | -0.07 pt |
-| MemoryArena migrate | 18.4% | 17.0% | 0.64 | -0.05 pt |
+| LoCoMo summary | 0.755 | 260 | — | 1.24 s |
+| LoCoMo raw | 0.873 | 7,398 | — | 17.18 s |
+| LoCoMo routed | 0.851 | 3,396 | 584 | 6.76 s |
+| LongMemEval summary | 0.678 | 380 | — | 5.37 s |
+| LongMemEval raw | 0.808 | 7,298 | — | 13.56 s |
+| LongMemEval routed | 0.752 | 4,235 | 660 | 10.04 s |
 
-Thus the reported 91.1%–94.3% refers to the fraction of the paper’s validated `Repair all` ceiling recovered, not the fraction of all lost system capability restored. `Rep.%` is over non-remove contracts. MemoryArena deletion, for example, republishes only 5.1% in absolute terms.
+The LoCoMo abstract's 54.1% token reduction compares QA input only. Adding router input gives 3,980 vs 7,398, about 46.2%. LongMemEval drops about 32.9% rather than 42.0% when router input is included. Routed TierMem is a cost–accuracy compromise: it improves over summary-only but remains below raw-only on both datasets.
 
-`ΔTask` is not native ToolBench or MemoryArena task success. It is constructed from the fraction of task-used artifacts lacking validated successors and the fraction whose stale versions remain visible. It shares state signals with Leak/Stale and cannot independently prove end-to-end task correctness.
+The learned SFT+GRPO router reaches 0.851 on LoCoMo, matching GPT-4.1-mini routing. GPT has higher hard-case recall/F1 and slightly lower latency; the learned router has fewer counterfactual regressions. The evidence supports a small router matching final accuracy, not dominating the larger router.
 
-Six cascade-unaware memory systems leave 69.8%–94.3% of affected artifacts leakable and 92.4%–99.7% of post-event actions stale across the two benchmarks. They are reference points under native semantics, not equal-contract repair baselines: they are not given the target barrier, validator or successor publication mechanism.
+## Provenance-specific evidence
 
-## The most important counter-result
+Linked raw-page warm starts improve routed LoCoMo accuracy from 0.836 to 0.851 and escalated-subset accuracy from 77.5% to 81.7%. However, the settings change routing on 234/1,540 questions. Where both escalate, Linked-correct/No-linked-wrong occurs 31 times and the reverse 25 times: a net six-case advantage. Search depth and token use are similar.
 
-Dropping only 1% of influence edges produces 17.7% Leak and 19.7% Stale-use; 5% edge drop produces 61.8% and 68.5%. The contract is therefore highly sensitive to provenance recall. Its 0% headline should always be stated with the complete-provenance premise.
+The pointer has a modest measured QA effect. Its claimed audit value is plausible but not directly established by citation precision/recall, unsupported-fact rate or provenance-corruption tests. Those are the missing measurements if provenance is the scientific claim.
 
-The validation oracle is similarly decisive. Schema-only checking false-passes 88.6% stale use; task-regression-only false-passes 29.8%; the composed checker reaches zero on the constructed test. Passing these checks still does not prove correctness in all future contexts.
+## Consolidation boundary
+
+Three epochs replay the same fixed questions, freezing memory within each epoch and updating between epochs. Input tokens fall while accuracy stays near 0.85. This shows repeated-workload amortization, not transfer to new questions; repeated queries can turn write-back into evaluation-specific cache. Future work should keep the history but replace later epochs with unseen questions and report store growth, conflict and provenance inheritance.
 
 ## Evidence boundary
 
 ### Directly supported
 
-- Barrier-first withdrawal eliminates repair-interval/post-repair serving of the known cascade when roots and influence closure are complete.
-- The exact selector recovers close to the exhaustive validated-publication ceiling with 0.57–0.76 normalized operator cost at `λ=0.3`.
-- Store-level cascade repair and parameter unlearning address different persistence paths and combine better than either alone in the neural-skill subset.
-- Small provenance omissions strongly amplify into uncovered stale descendants.
+- Raw evidence recovers details lost by write-time summaries on both benchmarks.
+- A learned sufficiency router improves summary-only accuracy at lower query cost than raw-only.
+- Source-linked warm starts produce a small gain over unlinked search.
+- Repeated-question consolidation reduces later token use with roughly stable accuracy.
 
 ### Reasonable inference
 
-- Visibility withdrawal and successor construction should be separate states in a safe memory lifecycle.
-- A provenance graph is a safety-critical control structure, not optional observability metadata.
-- Dependency-guided rollback can operate inside a barrier-first transaction, with predecessor-closed publication as the commit step.
+- Compact memory should be treated as an index/cache rather than the only fact store.
+- False cache hits are more harmful than unnecessary escalation because they remove the recovery path.
+- Page provenance can anchor later audit/repair only if downstream consumption dependencies are also logged.
 
 ### Untested hypotheses
 
-- The selector remains advantageous under native benchmark task success, realistic event distributions and structural provenance errors.
-- A production harness can enforce the barrier atomically across replicas, caches, tools and in-flight actions.
-- Held-out future triggers agree with the paper’s validation oracle.
+- Write-back improves unseen future questions rather than only repeated questions.
+- Pointers remain correct through multi-source synthesis and repeated UPDATE.
+- TierMem improves real tool-using trajectories with state changes and side effects.
+- Routing remains safe when raw evidence is absent or retrieval/generation cannot repair the answer.
 
-## Major reporting gaps
+## Reproducibility audit
 
-The paper does not state the number of repair events, per-event-type counts, detailed cascade-size distribution, event-generation/filtering process, or uncertainty for Tables 1–2. Only the selector frontier explicitly reports three seeds. It does not publish code or the min-cut inputs/validators. Value and cost assignment are insufficiently specified for independent reconstruction.
+The repository contains the linked-view implementation, modified Mem0, three benchmark runners, router offline-data/SFT/GRPO preparation, reward code and online evaluation. It links a Hugging Face Safetensors router and documents Qdrant/API/vLLM dependencies.
 
-The diagnostic task metric, complete-provenance premise and unequal external baselines mean the evidence supports a clean repair contract and a selector result under that contract. It does not yet establish deployment prevalence, autonomous invalid-root detection, native end-to-end task recovery or reversal of external harm.
+It does not include the main result ledger or router training records in git; the Hugging Face model card is empty, and training/serving commands are environment-dependent. The release improves inspectability and supports a reproduction attempt, but a checkout alone cannot regenerate the paper tables.
 
 ## Relationship to recent work
 
-- **Agentic Unlearning** jointly suppresses parameter and memory pathways; MEMOREPAIR refines the store-side publication contract and can host a parameter operator.
-- **TierMem** preserves links from verified summaries to immutable raw evidence; those links are infrastructure for later cascade correction when a source changes.
-- **MemSecBench** supplies write/execution/consequence/repair checkpoints and a service-side E3 oracle. It can test whether zero store exposure actually prevents future external consequences.
-- **Dependency-Guided Rollback Repair** decides which claims, actions and derived memories to invalidate/replay after failure. MEMOREPAIR defines what must be hidden before that computation finishes and how successors commit.
-- **StateWise** attacks the missing diagnosis stage before a coding action; its repair lineage could be tested as the influence graph feeding a barrier.
-- **DREAM** detects and attenuates poisoned memory. A shared snapshot, held-out triggers, availability and external-action oracle are required for comparison.
+- **ACON** improves the compressor through natural-language optimization. TierMem instead retains a recovery path for details any query-agnostic compressor misses.
+- **SUMER** searches uncompressed memory after the goal is known. TierMem uses summaries first and searches raw data after a sufficiency decision.
+- **RLM** treats long input as an external environment for programmatic inspection, but does not itself define persistent source-linked memory or verified cross-query write-back.
+- **MEMOREPAIR** asks what to withdraw when a source becomes invalid. TierMem asks how to reopen a still-valid source when a summary is insufficient: invalidation recall versus evidence recall.
+- **Dependency-Guided Rollback Repair** needs evidence-to-action consumption edges in addition to TierMem's summary-to-page pointers.
 
 ## Small falsifiable follow-up
 
-Instrument twelve MemSecBench cases with at least two descendant layers. Compare in-place deletion, barrier plus exhaustive repair, and barrier plus min-cut plus dependency rollback. During repair, issue concurrent benign and trigger requests; after repair, start a fresh session and inspect service-side E3.
+Use 120 real coding-agent histories. Generate summaries before revealing questions, then ask held-out questions answerable from summaries, linked pages, or non-linked pages. Compare summary-only, raw-search-only, TierMem-linked and TierMem with shuffled links under the same generator and total token budget.
 
-Report barrier latency, in-flight stale actions, withdrawal duration, native task completion, F1/F2, future E3 and total operator/token cost. Drop 1% of high-out-degree edges separately from 1% random edges. If min-cut does not improve the safety–availability frontier over exhaustive repair once native task success and structural missing edges are included, stop scaling models and retain only the barrier-first contract claim.
+Report accuracy, false cache hits, escalation precision/recall, citation precision/recall, unsupported facts, P95 latency and total input including router overhead. In round two, ask different questions about the same history after write-back. If linked pointers do not beat shuffled pointers under fixed routing/retrieval budgets, provenance is not the performance mechanism. If write-back helps only repeated questions, classify it as query caching rather than memory learning.
 
 ## Synthesis
 
-MEMOREPAIR’s durable contribution is the transaction boundary: invalidate visibility first, then reconstruct and atomically republish a validated dependency closure. The min-cut selector is useful inside that boundary. The paper’s own robustness table also points to the harder research problem: complete and trustworthy influence provenance. Without it, a small logging omission can leave a large part of the stale cascade outside the barrier.
+TierMem's durable contribution is the evidence hierarchy: fast lossy summaries linked to an immutable source, plus a query-time decision about whether cheap evidence is sufficient. It demonstrates a useful cost–accuracy frontier, but the headline needs denominator care, raw-only remains more accurate, and provenance's controlled QA gain is modest. The decisive next evaluation is whether links are correct, false cache hits are controlled, and recovered facts help unseen questions without contaminating long-term memory.
